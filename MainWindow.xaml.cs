@@ -35,30 +35,37 @@ namespace Moja_gra
         }
         int PlayerSpeed = 5;
         bool keyLeft, keyRight, keyUp, keyDown;
+        public static double Player_x, Player_y;
+        public static double Mouse_x, Mouse_y;
 
         public Bullet bullet { get; }
 
         private void MyGame_LeftClick(object sender, MouseButtonEventArgs e)
         {
             Linia linia = new Linia();
-            linia.draw_Linia(MyGame, (int)Canvas.GetLeft(Player) + 25, (int)Canvas.GetTop(Player) + 25, (int)Mouse.GetPosition(Application.Current.MainWindow).X, (int)Mouse.GetPosition(Application.Current.MainWindow).Y);
+            //linia.draw_Linia(MyGame, (int)Canvas.GetLeft(Player) + 25, (int)Canvas.GetTop(Player) + 25, (int)Mouse.GetPosition(Application.Current.MainWindow).X, (int)Mouse.GetPosition(Application.Current.MainWindow).Y);
             //CalculateAngle();
             Point position = e.GetPosition(MyGame);
-            bullet.CreateRectangle(Canvas.GetLeft(Player)+25,Canvas.GetTop(Player)+25,position.X, position.Y);
+            bullet.createRectangle(Canvas.GetLeft(Player)+25,Canvas.GetTop(Player)+25,position.X, position.Y);
 
         }
 
         private void CalculateAngle()
         {
+            string stats = "";
             double angle;
-            int x1 = (int)Canvas.GetLeft(Player) + 25;
-            int y1 = (int)Canvas.GetTop(Player) + 25;
-            int x2 = (int)Mouse.GetPosition(Application.Current.MainWindow).X;
-            int y2 = (int)Mouse.GetPosition(Application.Current.MainWindow).Y;
-            angle = Math.Atan2((y2 - y1), (x2 - x1)) * 180 / Math.PI;
-            //angle += 360;
-            if(angle < 0) angle += 360;
-            tekst.Text = angle.ToString();
+            double x1 = Player_x;
+            double y1 = Player_y;
+            double x2 = Mouse_x;
+            double y2 = Mouse_y;
+            angle = Math.Atan2((y2 - y1), (x2 - x1));
+            stats += angle.ToString();
+            stats += "\n";
+            angle = angle * 180 / Math.PI;
+            stats += angle.ToString();
+            stats += "\n";
+            stats += Bullet.bulletList.Count.ToString();
+            tekst.Text = stats;
         }
 
         private void gameTimer_tick(object? sender, EventArgs e)
@@ -79,8 +86,12 @@ namespace Moja_gra
             {
                 Canvas.SetTop(Player, (Canvas.GetTop(Player) + PlayerSpeed));
             }
+            Player_x = Canvas.GetLeft(Player)+25;
+            Player_y = Canvas.GetTop(Player)+25;
+            Mouse_x = Mouse.GetPosition(Application.Current.MainWindow).X;
+            Mouse_y = Mouse.GetPosition(Application.Current.MainWindow).Y;
             CalculateAngle();
-            Canvas.SetZIndex(Player, 1);
+            //Canvas.SetZIndex(Player, 1); //Makes player apear on top
         }
 
         private void KeyDown(object sender, KeyEventArgs e)

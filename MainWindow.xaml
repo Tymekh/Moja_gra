@@ -11,8 +11,8 @@
         Background="Black"
         Title="Moja Gra">
     <Canvas Background="AntiqueWhite" x:Name="MyGame" Focusable="True" KeyUp="KeyUp" KeyDown="KeyDown" Height="450" Width="800" MouseLeftButtonDown="MyGame_LeftClick">
-        <TextBlock x:Name="tekst" Width="200"></TextBlock>
-        <Rectangle x:Name="Player" Width="50" Height="50" Fill="DarkSlateBlue" Canvas.Left="350" Canvas.Top="400"></Rectangle>
+        <TextBlock x:Name="tekst" Width="200" Height="50"></TextBlock>
+        <Rectangle x:Name="Player" Width="50" Height="50" Fill="DarkSlateBlue" Canvas.Left="100" Canvas.Top="100"></Rectangle>
     </Canvas>
 </Window>
 
