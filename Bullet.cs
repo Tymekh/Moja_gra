@@ -12,8 +12,7 @@ namespace Moja_gra
         private Canvas canvas;
         private DispatcherTimer bulletTimer = new DispatcherTimer();
         private Rectangle rectangle1;
-        double angle;
-        public static double rectangleAngle;
+        //double angle;
         public static List<Rectangle> bulletList = new List<Rectangle>();
         List<double> bulletAngleList = new List<double>();
 
@@ -65,7 +64,7 @@ namespace Moja_gra
             Canvas.SetLeft(rectangle, MainWindow.Player_x);
             Canvas.SetTop(rectangle, MainWindow.Player_y);
 
-            double Angle = calculateAngle(MainWindow.Player_x, MainWindow.Player_y, MainWindow.Mouse_x, MainWindow.Mouse_y);
+            double angle = calculateAngle(MainWindow.Player_x, MainWindow.Player_y, MainWindow.Mouse_x, MainWindow.Mouse_y);
             //Adding rectangles to list to track all of them
             bulletList.Add(rectangle);
             bulletAngleList.Add(angle);
@@ -102,6 +101,7 @@ namespace Moja_gra
         }
         public double calculateAngle(double x1, double y1, double x2, double y2)
         {
+            double angle;
             angle = Math.Atan2((y2 - y1), (x2 - x1)); //calculate angle in radians
             return angle;
         }

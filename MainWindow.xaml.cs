@@ -23,6 +23,12 @@ namespace Moja_gra
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        int PlayerSpeed = 5;
+        bool keyLeft, keyRight, keyUp, keyDown;
+        public static double Player_x, Player_y;
+        public static double Mouse_x, Mouse_y;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -33,10 +39,6 @@ namespace Moja_gra
             MyGame.Focus();
             bullet = new Bullet(MyGame);
         }
-        int PlayerSpeed = 5;
-        bool keyLeft, keyRight, keyUp, keyDown;
-        public static double Player_x, Player_y;
-        public static double Mouse_x, Mouse_y;
 
         public Bullet bullet { get; }
 
