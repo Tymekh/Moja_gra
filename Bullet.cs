@@ -38,7 +38,10 @@ namespace Moja_gra
                 {
                     Rectangle rectangle = bulletList[i];
                     double angle = bulletAngleList[i];
-                    isOutsideCanvas(rectangle, i);
+                    if (isOutsideCanvas(rectangle))
+                    {
+                        removeRectangle(rectangle, i);
+                    };
 
                     double xMovement = Math.Cos(angle) * 5;
                     double yMovement = Math.Sin(angle) * 5;
@@ -74,24 +77,25 @@ namespace Moja_gra
 
         }
 
-        public void isOutsideCanvas(Rectangle rectangle, int index)
+        public bool isOutsideCanvas(Rectangle rectangle)
         {
             if (Canvas.GetLeft(rectangle) < 0) 
             {
-                removeRectangle(rectangle, index);
+                return true;
             }
             if(Canvas.GetLeft(rectangle) > canvas.Width) 
             {
-                removeRectangle(rectangle, index);
+                return true;
             }
             if(Canvas.GetTop(rectangle) < 0)
             {
-                removeRectangle(rectangle, index);
+                return true;
             }
             if(Canvas.GetTop(rectangle) > canvas.Height)
             {
-                removeRectangle(rectangle, index);
+                return true;
             }
+            return false;
         }
         public void removeRectangle(Rectangle rectangle, int index) 
         {

@@ -98,22 +98,10 @@ namespace Moja_gra
 
         private void KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.A)
-            {
-                keyLeft = true;
-            }
-            if (e.Key == Key.D)
-            {
-                keyRight = true;
-            }
-            if (e.Key == Key.W)
-            {
-                keyUp = true;
-            }
-            if (e.Key == Key.S)
-            {
-                keyDown = true;
-            }
+            if (e.Key == Key.A) keyLeft = true;
+            if (e.Key == Key.D) keyRight = true;
+            if (e.Key == Key.W) keyUp = true;
+            if (e.Key == Key.S) keyDown = true;
             if (e.Key == Key.Q)
             {
                 ;
@@ -125,22 +113,10 @@ namespace Moja_gra
         }
         private void KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.A)
-            {
-                keyLeft = false;
-            }
-            if (e.Key == Key.D)
-            {
-                keyRight = false;
-            }
-            if (e.Key == Key.W)
-            {
-                keyUp = false;
-            }
-            if (e.Key == Key.S)
-            {
-                keyDown = false;
-            }
+            if (e.Key == Key.A) keyLeft = false;
+            if (e.Key == Key.D) keyRight = false;
+            if (e.Key == Key.W) keyUp = false;
+            if (e.Key == Key.S) keyDown = false;
         }
     }
 }
