@@ -67,9 +67,9 @@ namespace Moja_gra
             // Create the rectangle
             Rectangle rectangle = new Rectangle
             {
-                Width = 10,
-                Height = 10,
-                Fill = Brushes.Black
+                Width = 100,
+                Height = 100,
+                Fill = image
             };
             GunRectangle = rectangle;
 
