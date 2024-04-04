@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.Xml;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -29,6 +30,9 @@ namespace Moja_gra
         public static double Player_x, Player_y;
         public static double Mouse_x, Mouse_y;
 
+        public Bullet bullet { get; }
+        public Gun Gun { get; }
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -38,9 +42,9 @@ namespace Moja_gra
             gameTimer.Start();
             MyGame.Focus();
             bullet = new Bullet(MyGame);
+            Gun = new Gun(MyGame);
+            Gun.createGun();
         }
-
-        public Bullet bullet { get; }
 
         private void MyGame_LeftClick(object sender, MouseButtonEventArgs e)
         {
@@ -72,28 +76,26 @@ namespace Moja_gra
 
         private void gameTimer_tick(object? sender, EventArgs e)
         {
-            if (keyLeft && Canvas.GetLeft(Player) > 0)
-            {
-                Canvas.SetLeft(Player, (Canvas.GetLeft(Player) - PlayerSpeed));
-            }
-            if (keyUp && Canvas.GetTop(Player) > 0)
-            {
-                Canvas.SetTop(Player, (Canvas.GetTop(Player) - PlayerSpeed));
-            }
-            if (keyRight && Canvas.GetLeft(Player) + Player.ActualWidth < 800)
-            {
-                Canvas.SetLeft(Player, (Canvas.GetLeft(Player) + PlayerSpeed));
-            }
-            if (keyDown && Canvas.GetTop(Player) + Player.ActualHeight < 450)
-            {
-                Canvas.SetTop(Player, (Canvas.GetTop(Player) + PlayerSpeed));
-            }
+            //Updating public static variables
             Player_x = Canvas.GetLeft(Player)+25;
             Player_y = Canvas.GetTop(Player)+25;
             Mouse_x = Mouse.GetPosition(Application.Current.MainWindow).X;
             Mouse_y = Mouse.GetPosition(Application.Current.MainWindow).Y;
             CalculateAngle();
-            //Canvas.SetZIndex(Player, 1); //Makes player apear on top
+
+            //Makes player apear on top
+            //Canvas.SetZIndex(Player, 1);
+
+            //Ruch
+            movement();
+        }
+
+        private void movement()
+        {
+            if (keyLeft && Canvas.GetLeft(Player) > 0) Canvas.SetLeft(Player, (Canvas.GetLeft(Player) - PlayerSpeed));
+            if (keyUp && Canvas.GetTop(Player) > 0) Canvas.SetTop(Player, (Canvas.GetTop(Player) - PlayerSpeed));
+            if (keyRight && Canvas.GetLeft(Player) + Player.ActualWidth < 800) Canvas.SetLeft(Player, (Canvas.GetLeft(Player) + PlayerSpeed));
+            if (keyDown && Canvas.GetTop(Player) + Player.ActualHeight < 450) Canvas.SetTop(Player, (Canvas.GetTop(Player) + PlayerSpeed));
         }
 
         private void KeyDown(object sender, KeyEventArgs e)

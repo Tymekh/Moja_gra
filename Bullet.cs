@@ -15,6 +15,7 @@ namespace Moja_gra
         //double angle;
         public static List<Rectangle> bulletList = new List<Rectangle>();
         List<double> bulletAngleList = new List<double>();
+        private int BulletSpeed = 10;
 
         public Bullet(Canvas canvas)
         {
@@ -43,8 +44,8 @@ namespace Moja_gra
                         removeRectangle(rectangle, i);
                     };
 
-                    double xMovement = Math.Cos(angle) * 5;
-                    double yMovement = Math.Sin(angle) * 5;
+                    double xMovement = Math.Cos(angle) * BulletSpeed;
+                    double yMovement = Math.Sin(angle) * BulletSpeed;
 
                     Canvas.SetLeft(rectangle, Canvas.GetLeft(rectangle) + xMovement);
                     Canvas.SetTop(rectangle, Canvas.GetTop(rectangle) + yMovement);
@@ -63,14 +64,17 @@ namespace Moja_gra
             };
             rectangle1 = rectangle;
 
-            //Set the position of the rectangle
-            Canvas.SetLeft(rectangle, MainWindow.Player_x);
-            Canvas.SetTop(rectangle, MainWindow.Player_y);
-
             double angle = calculateAngle(MainWindow.Player_x, MainWindow.Player_y, MainWindow.Mouse_x, MainWindow.Mouse_y);
             //Adding rectangles to list to track all of them
             bulletList.Add(rectangle);
             bulletAngleList.Add(angle);
+
+            //Set the position of the rectangle
+            double xMovement = Math.Cos(angle) * 30;
+            double yMovement = Math.Sin(angle) * 30;
+
+            Canvas.SetLeft(rectangle, MainWindow.Player_x + xMovement);
+            Canvas.SetTop(rectangle, MainWindow.Player_y + yMovement);
 
             // Add the rectangle to the canvas
             canvas.Children.Add(rectangle);
