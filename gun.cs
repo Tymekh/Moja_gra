@@ -41,15 +41,16 @@ namespace Moja_gra
                 RotateTransform rotation = new RotateTransform(angle * 180 / Math.PI);
                 //rotation.CenterX = GunRectangle.Width / 2;
                 //rotation.CenterY = GunRectangle.Height / 2;
-                GunRectangle.RenderTransformOrigin = new System.Windows.Point(0, 0);
+                GunRectangle.RenderTransformOrigin = new System.Windows.Point(0.5, 0.5);
                 GunRectangle.RenderTransform = rotation;
+                int distance = 30;
 
                 // change in movement
-                double xMovement = Math.Cos(angle) * 30;
-                double yMovement = Math.Sin(angle) * 30;
+                double xMovement = Math.Cos(angle) * distance;
+                double yMovement = Math.Sin(angle) * distance;
 
-                Canvas.SetLeft(GunRectangle, MainWindow.Player_x + xMovement);
-                Canvas.SetTop(GunRectangle, MainWindow.Player_y + yMovement);
+                Canvas.SetLeft(GunRectangle, MainWindow.Player_x - GunRectangle.ActualWidth / 2 + xMovement);
+                Canvas.SetTop(GunRectangle, MainWindow.Player_y - GunRectangle.ActualHeight / 2 + yMovement);
 
                 //center of gun
                 double GunRectangleCentre_X = Canvas.GetLeft(GunRectangle) + GunRectangle.Width / 2;
@@ -67,8 +68,8 @@ namespace Moja_gra
             // Create the rectangle
             Rectangle rectangle = new Rectangle
             {
-                Width = 100,
-                Height = 100,
+                Width = 50,
+                Height = 50,
                 Fill = image
             };
             GunRectangle = rectangle;

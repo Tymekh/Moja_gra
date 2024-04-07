@@ -77,8 +77,8 @@ namespace Moja_gra
         private void gameTimer_tick(object? sender, EventArgs e)
         {
             //Updating public static variables
-            Player_x = Canvas.GetLeft(Player)+25;
-            Player_y = Canvas.GetTop(Player)+25;
+            Player_x = Canvas.GetLeft(Player) + Player.ActualWidth / 2;
+            Player_y = Canvas.GetTop(Player) + Player.ActualHeight / 2; 
             Mouse_x = Mouse.GetPosition(Application.Current.MainWindow).X;
             Mouse_y = Mouse.GetPosition(Application.Current.MainWindow).Y;
             CalculateAngle();
