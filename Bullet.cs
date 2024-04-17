@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -9,17 +11,15 @@ namespace Moja_gra
 {
     public class Bullet
     {
-        private Canvas canvas;
         private DispatcherTimer bulletTimer = new DispatcherTimer();
-        private Rectangle rectangle1;
+        private Rectangle projectile1;
         //double angle;
         public static List<Rectangle> bulletList = new List<Rectangle>();
         List<double> bulletAngleList = new List<double>();
-        private int BulletSpeed = 10;
+        private int BulletSpeed = 7;
 
-        public Bullet(Canvas canvas)
+        public Bullet()
         {
-            this.canvas = canvas;
             bulletTimerStart();
         }
 
@@ -33,77 +33,77 @@ namespace Moja_gra
 
         private void bulletTimer_Tick(object? sender, EventArgs e)
         {
-            if (rectangle1 != null)
+            if (projectile1 != null)
             {
                 for (int i = 0; i < bulletList.Count; i++)
                 {
-                    Rectangle rectangle = bulletList[i];
+                    Rectangle projectile = bulletList[i];
                     double angle = bulletAngleList[i];
-                    if (isOutsideCanvas(rectangle))
+                    if (isOutsideCanvas(projectile))
                     {
-                        removeRectangle(rectangle, i);
+                        removeRectangle(projectile, i);
                     };
 
                     double xMovement = Math.Cos(angle) * BulletSpeed;
                     double yMovement = Math.Sin(angle) * BulletSpeed;
 
-                    Canvas.SetLeft(rectangle, Canvas.GetLeft(rectangle) + xMovement);
-                    Canvas.SetTop(rectangle, Canvas.GetTop(rectangle) + yMovement);
+                    Canvas.SetLeft(projectile, Canvas.GetLeft(projectile) + xMovement);
+                    Canvas.SetTop(projectile, Canvas.GetTop(projectile) + yMovement);
                 }
             }
         }
 
-        public void createRectangle(double x, double y, double Mouse_x, double Mouse_y)
+        public void createBullet(Point point,double angle)
         {
-            // Create the rectangle
-            Rectangle rectangle = new Rectangle
+            Rectangle projectile = new Rectangle
             {
                 Width = 10,
                 Height = 10,
                 Fill = Brushes.Black
             };
-            rectangle1 = rectangle;
+            projectile1 = projectile;
 
-            double angle = calculateAngle(MainWindow.Player_x, MainWindow.Player_y, MainWindow.Mouse_x, MainWindow.Mouse_y);
-            //Adding rectangles to list to track all of them
-            bulletList.Add(rectangle);
+            //double angle = calculateAngle(Player.Player_x, Player.Player_y, MainWindow.Mouse_x, MainWindow.Mouse_y);
+            bulletList.Add(projectile);
             bulletAngleList.Add(angle);
 
-            //Set the position of the rectangle
-            double xMovement = Math.Cos(angle) * 30;
-            double yMovement = Math.Sin(angle) * 30;
+            double distance = 25;
 
-            Canvas.SetLeft(rectangle, MainWindow.Player_x + xMovement);
-            Canvas.SetTop(rectangle, MainWindow.Player_y + yMovement);
+            double xMovement = Math.Cos(angle) * distance;
+            double yMovement = Math.Sin(angle) * distance;
 
-            // Add the rectangle to the canvas
-            canvas.Children.Add(rectangle);
+            double x = point.X - projectile.Width / 2;
+            double y = point.Y - projectile.Height / 2;
 
+            Canvas.SetLeft(projectile, x + xMovement);
+            Canvas.SetTop(projectile, y + yMovement);
+
+            MainWindow.MyCanvas.Children.Add(projectile);
         }
 
-        public bool isOutsideCanvas(Rectangle rectangle)
+        public bool isOutsideCanvas(Rectangle projectile)
         {
-            if (Canvas.GetLeft(rectangle) < 0) 
+            if (Canvas.GetLeft(projectile) < 0) 
             {
                 return true;
             }
-            if(Canvas.GetLeft(rectangle) > canvas.Width) 
+            if(Canvas.GetLeft(projectile) > MainWindow.MyCanvas.Width) 
             {
                 return true;
             }
-            if(Canvas.GetTop(rectangle) < 0)
+            if(Canvas.GetTop(projectile) < 0)
             {
                 return true;
             }
-            if(Canvas.GetTop(rectangle) > canvas.Height)
+            if(Canvas.GetTop(projectile) > MainWindow.MyCanvas.Height)
             {
                 return true;
             }
             return false;
         }
-        public void removeRectangle(Rectangle rectangle, int index) 
+        public void removeRectangle(Rectangle projectile, int index) 
         {
-            canvas.Children.Remove(rectangle);
+            MainWindow.MyCanvas.Children.Remove(projectile);
             bulletList.RemoveAt(index);
             bulletAngleList.RemoveAt(index);
         }

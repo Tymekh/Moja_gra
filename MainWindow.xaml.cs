@@ -24,11 +24,10 @@ namespace Moja_gra
     /// </summary>
     public partial class MainWindow : Window
     {
-
-        int PlayerSpeed = 5;
-        bool keyLeft, keyRight, keyUp, keyDown;
-        public static double Player_x, Player_y;
+        public static Canvas MyCanvas;
+        public static Player Player;
         public static double Mouse_x, Mouse_y;
+        public static Rectangle Podloga;
 
         public Bullet bullet { get; }
         public Gun Gun { get; }
@@ -36,14 +35,21 @@ namespace Moja_gra
         public MainWindow()
         {
             InitializeComponent();
+            MyCanvas = MyGame;
+
+            Podloga = Floor;
             DispatcherTimer gameTimer = new DispatcherTimer();
             gameTimer.Tick += gameTimer_tick;
             gameTimer.Interval = TimeSpan.FromMilliseconds(1);
             gameTimer.Start();
             MyGame.Focus();
-            bullet = new Bullet(MyGame);
-            Gun = new Gun(MyGame);
-            Gun.createGun();
+            //bullet = new Bullet(MyGame);
+            Player gracz = new Player();
+            gracz.createPlayer(100, 100);
+            Player = gracz;
+            Gun = new Gun();
+            Gun.createGun(Player);
+            MessageBox.Show("tak");
         }
 
         private void MyGame_LeftClick(object sender, MouseButtonEventArgs e)
@@ -52,16 +58,17 @@ namespace Moja_gra
             //linia.draw_Linia(MyGame, (int)Canvas.GetLeft(Player) + 25, (int)Canvas.GetTop(Player) + 25, (int)Mouse.GetPosition(Application.Current.MainWindow).X, (int)Mouse.GetPosition(Application.Current.MainWindow).Y);
             //CalculateAngle();
             Point position = e.GetPosition(MyGame);
-            bullet.createRectangle(Canvas.GetLeft(Player)+25,Canvas.GetTop(Player)+25,position.X, position.Y);
+            //bullet.createRectangle(Canvas.GetLeft(Player)+25,Canvas.GetTop(Player)+25,position.X, position.Y
+            Gun.Shot();
 
         }
 
-        private void CalculateAngle()
+        private double CalculateAngle()
         {
             string stats = "";
             double angle;
-            double x1 = Player_x;
-            double y1 = Player_y;
+            double x1 = Canvas.GetLeft(Player);
+            double y1 = Canvas.GetTop(Player);
             double x2 = Mouse_x;
             double y2 = Mouse_y;
             angle = Math.Atan2((y2 - y1), (x2 - x1));
@@ -71,39 +78,31 @@ namespace Moja_gra
             stats += angle.ToString();
             stats += "\n";
             stats += Bullet.bulletList.Count.ToString();
+            stats += "\n";
+            stats += "Vx: " + Player.Vx.ToString() + "\n";
+            stats += "Vy: " + Player.Vy.ToString() + "\n";
+            stats += "\n";
             tekst.Text = stats;
+            return angle;
         }
 
         private void gameTimer_tick(object? sender, EventArgs e)
         {
             //Updating public static variables
-            Player_x = Canvas.GetLeft(Player) + Player.ActualWidth / 2;
-            Player_y = Canvas.GetTop(Player) + Player.ActualHeight / 2; 
+            //Player_x = Canvas.GetLeft(Player) + Player.ActualWidth / 2;
+            //Player_y = Canvas.GetTop(Player) + Player.ActualHeight / 2; 
             Mouse_x = Mouse.GetPosition(Application.Current.MainWindow).X;
             Mouse_y = Mouse.GetPosition(Application.Current.MainWindow).Y;
             CalculateAngle();
 
             //Makes player apear on top
-            //Canvas.SetZIndex(Player, 1);
-
-            //Ruch
-            movement();
+            //Canvas.SetZIndex(Player.player, 1);
         }
 
-        private void movement()
-        {
-            if (keyLeft && Canvas.GetLeft(Player) > 0) Canvas.SetLeft(Player, (Canvas.GetLeft(Player) - PlayerSpeed));
-            if (keyUp && Canvas.GetTop(Player) > 0) Canvas.SetTop(Player, (Canvas.GetTop(Player) - PlayerSpeed));
-            if (keyRight && Canvas.GetLeft(Player) + Player.ActualWidth < 800) Canvas.SetLeft(Player, (Canvas.GetLeft(Player) + PlayerSpeed));
-            if (keyDown && Canvas.GetTop(Player) + Player.ActualHeight < 450) Canvas.SetTop(Player, (Canvas.GetTop(Player) + PlayerSpeed));
-        }
 
         private void KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.A) keyLeft = true;
-            if (e.Key == Key.D) keyRight = true;
-            if (e.Key == Key.W) keyUp = true;
-            if (e.Key == Key.S) keyDown = true;
+            Player.PlayerMovement(sender, e);
             if (e.Key == Key.Q)
             {
                 ;
@@ -112,13 +111,6 @@ namespace Moja_gra
             {
                 ;
             }
-        }
-        private void KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.A) keyLeft = false;
-            if (e.Key == Key.D) keyRight = false;
-            if (e.Key == Key.W) keyUp = false;
-            if (e.Key == Key.S) keyDown = false;
         }
     }
 }
