@@ -24,11 +24,12 @@ namespace Moja_gra
         private static DispatcherTimer MovementTimer = new DispatcherTimer();
         public static double Player_x;
         public static double Player_y;
-        double gravity = 0.1;
-        double playerSpeed = 0.5;
-        public double Vx;
-        public double Vy;
-        private double MovementReduce = 0.05;
+        public double Vx, Vy;
+        private double Gravity = 0.1;
+        private double PlayerSpeed = 0.5;
+        private double JumpPower = 5;
+        private double HorizontalMovementReduce = 0.2;
+        private bool IsOnGround = false;
 
         public Player()
         {
@@ -45,28 +46,29 @@ namespace Moja_gra
 
         private void MovementTick(object? sender, EventArgs e)
         {
+            //if (!CheckColision(this, MainWindow.MyCanvas))
+            //{
+            //    ;
+            //}
             Canvas.SetLeft(this, Canvas.GetLeft(this) + Vx);
             Canvas.SetTop(this, Canvas.GetTop(this) + Vy);
             if(CheckColision(this, MainWindow.Podloga))
             {
-                if(Vy != MovementReduce)
+                if (Vy != Gravity)
                 {
                     Canvas.SetTop(this, Canvas.GetTop(this) - Vy);
                 }
                 Vy = 0;
+                IsOnGround = true;
             }
             else
             {
-                Vy += gravity;
+                Vy += Gravity;
             }
 
-            if (Vy < 0) Vy += MovementReduce;
-            if (Vy > 0) Vy -= MovementReduce;
-            if (Vx < 0) Vx += MovementReduce;
-            if (Vx > 0) Vx -= MovementReduce;
-
-            if(Math.Round(Vy, 2) == 0) Vy = 0;
-            if(Math.Round(Vx, 2) == 0) Vx = 0;
+            if (Vx < 0) Vx += HorizontalMovementReduce;
+            if (Vx > 0) Vx -= HorizontalMovementReduce;
+            if (-HorizontalMovementReduce < Vx && Vx < HorizontalMovementReduce) Vx = 0;
 
             Player_x = Canvas.GetLeft(this);
             Player_y = Canvas.GetTop(this);
@@ -81,24 +83,25 @@ namespace Moja_gra
 
         public void PlayerMovement(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.A) goLeft();
-            if (e.Key == Key.D) goRight();
-            if (e.Key == Key.W) Jump();
+            if (Keyboard.IsKeyDown(Key.A)) goLeft();
+            if (Keyboard.IsKeyDown(Key.D)) goRight();
+            if (Keyboard.IsKeyDown(Key.W)) Jump();
             //if (e.Key == Key.S) Down();
         }
         private void goLeft()
         {
-            Vx -= playerSpeed;
+            Vx -= PlayerSpeed;
         }
         private void goRight()
         {
-            Vx += playerSpeed;
+            Vx += PlayerSpeed;
         }
         private void Jump()
         {
-            if(Vy == 0)
+            if(Vy == 0 && IsOnGround == true)
             {
-                Vy -= 5;
+                Vy -= JumpPower;
+                IsOnGround = false;
             }
         }
         private void Down()

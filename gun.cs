@@ -22,8 +22,9 @@ namespace Moja_gra
         private Bullet bullet;
         FrameworkElement Parent;
 
-        public Gun()
+        public Gun(FrameworkElement parent)
         {
+            Parent = parent;
             GunTimerStart();
             bullet = new Bullet();
         }
@@ -40,41 +41,33 @@ namespace Moja_gra
         {
             if (GunRectangle != null)
             {
+                Point ParentPosition = new Point(Canvas.GetLeft(Parent) + Parent.ActualWidth / 2, Canvas.GetTop(Parent) + Parent.ActualHeight / 2);
+                Point MousePosition = new Point(MainWindow.Mouse_x, MainWindow.Mouse_y);
 
-                Point Mouse = new Point(MainWindow.Mouse_x, MainWindow.Mouse_y);
+                double angle = CalculateAngle(ParentPosition, MousePosition);
 
-                Rectangle Mouse2 = new Rectangle { };
-                Canvas.SetLeft(Mouse2, Mouse.X);
-                Canvas.SetTop(Mouse2, Mouse.Y);
 
-                double angle = CalculateAngle(Parent, Mouse2);
-
-                RotateTransform rotation = new RotateTransform(angle * 180 / Math.PI);
-                //rotation.CenterX = GunRectangle.Width / 2;
-                //rotation.CenterY = GunRectangle.Height / 2;
-                GunRectangle.RenderTransformOrigin = new System.Windows.Point(0.5, 0.5);
-                GunRectangle.RenderTransform = rotation;
                 int distance = 30;
 
                 // change in movement
                 double xMovement = Math.Cos(angle) * distance;
                 double yMovement = Math.Sin(angle) * distance;
 
-                Canvas.SetLeft(GunRectangle, Player.Player_x - GunRectangle.ActualWidth / 2 + xMovement);
-                Canvas.SetTop(GunRectangle, Player.Player_y - GunRectangle.ActualHeight / 2 + yMovement);
+                Canvas.SetLeft(GunRectangle, Canvas.GetLeft(Parent) + Parent.ActualWidth / 2 - GunRectangle.ActualWidth / 2 + xMovement);
+                Canvas.SetTop(GunRectangle, Canvas.GetTop(Parent) + Parent.ActualHeight / 2 - GunRectangle.ActualHeight / 2 + yMovement);
 
                 //center of gun
                 double GunRectangleCentre_X = Canvas.GetLeft(GunRectangle) + GunRectangle.Width / 2;
                 double GunRectangleCentre_Y = Canvas.GetTop(GunRectangle) + GunRectangle.Height / 2;
 
-                //Canvas.SetLeft(GunRectangle, GunRectangleCentre_X);
-                //Canvas.SetTop(GunRectangle, GunRectangleCentre_Y);
+                RotateTransform rotation = new RotateTransform(angle * 180 / Math.PI);
+                GunRectangle.RenderTransformOrigin = new System.Windows.Point(0.5, 0.5);
+                GunRectangle.RenderTransform = rotation;
             }
         }
 
-        public void createGun(FrameworkElement parent)
+        public void createGun()
         {
-            Parent = Parent;
             ImageBrush image = new ImageBrush { };
             image.ImageSource = new BitmapImage(new Uri(@"pack://application:,,/img/gun.png"));
             // Create the rectangle
@@ -86,8 +79,8 @@ namespace Moja_gra
             };
             GunRectangle = rectangle;
 
-            Canvas.SetLeft(rectangle, Player.Player_x);
-            Canvas.SetTop(rectangle, Player.Player_y);
+            Canvas.SetLeft(rectangle, Canvas.GetLeft(Parent) + Parent.ActualWidth / 2);
+            Canvas.SetTop(rectangle, Canvas.GetTop(Parent) + Parent.ActualHeight / 2);
 
 
             // Add the rectangle to the MainWindow.MyCanvas
@@ -99,13 +92,10 @@ namespace Moja_gra
         {
             if(GunRectangle != null)
             {
-                Point Mouse = new Point(MainWindow.Mouse_x, MainWindow.Mouse_y);
+                Point ParentPosition = new Point(Canvas.GetLeft(Parent) + Parent.ActualWidth / 2, Canvas.GetTop(Parent) + Parent.ActualHeight / 2);
+                Point MousePosition = new Point(MainWindow.Mouse_x, MainWindow.Mouse_y);
 
-                Rectangle Mouse2 = new Rectangle{};
-                Canvas.SetLeft(Mouse2, Mouse.X);
-                Canvas.SetTop(Mouse2, Mouse.Y);
-
-                double angle = CalculateAngle(Parent, Mouse2);
+                double angle = CalculateAngle(ParentPosition, MousePosition);
 
                 double GunRectangleCentre_X = Canvas.GetLeft(GunRectangle) + GunRectangle.Width / 2;
                 double GunRectangleCentre_Y = Canvas.GetTop(GunRectangle) + GunRectangle.Height / 2;
@@ -114,14 +104,14 @@ namespace Moja_gra
                 bullet.createBullet(point,angle);
             }
         }
-        private double CalculateAngle(FrameworkElement point1, FrameworkElement point2) // oblicza kąt pomiędzy elementami
+        private double CalculateAngle(Point point1, Point point2) // oblicza kąt pomiędzy elementami
         {
             if (point1 == null || point2 == null) { return 0; }
 
-            double x1 = Canvas.GetLeft(point1) + point1.ActualWidth / 2;
-            double y1 = Canvas.GetTop(point1) + point1.ActualHeight / 2;
-            double x2 = Canvas.GetLeft(point2) + point2.ActualWidth / 2;
-            double y2 = Canvas.GetTop(point2) + point2.ActualHeight / 2;
+            double x1 = point1.X;
+            double y1 = point1.Y;
+            double x2 = point2.X;
+            double y2 = point2.Y;
 
             double angle = Math.Atan2((y2 - y1), (x2 - x1));
             return angle;

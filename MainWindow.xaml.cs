@@ -31,7 +31,7 @@ namespace Moja_gra
 
         public Bullet bullet { get; }
         public Gun Gun { get; }
-        
+
         public MainWindow()
         {
             InitializeComponent();
@@ -47,9 +47,8 @@ namespace Moja_gra
             Player gracz = new Player();
             gracz.createPlayer(100, 100);
             Player = gracz;
-            Gun = new Gun();
-            Gun.createGun(Player);
-            MessageBox.Show("tak");
+            Gun = new Gun(Player);
+            Gun.createGun();
         }
 
         private void MyGame_LeftClick(object sender, MouseButtonEventArgs e)
@@ -82,6 +81,10 @@ namespace Moja_gra
             stats += "Vx: " + Player.Vx.ToString() + "\n";
             stats += "Vy: " + Player.Vy.ToString() + "\n";
             stats += "\n";
+            stats += "W: " + Keyboard.IsKeyDown(Key.W) + "\n";
+            stats += "A: " + Keyboard.IsKeyDown(Key.A) + "\n";
+            stats += "S: " + Keyboard.IsKeyDown(Key.S) + "\n";
+            stats += "D: " + Keyboard.IsKeyDown(Key.D) + "\n";
             tekst.Text = stats;
             return angle;
         }
@@ -89,10 +92,8 @@ namespace Moja_gra
         private void gameTimer_tick(object? sender, EventArgs e)
         {
             //Updating public static variables
-            //Player_x = Canvas.GetLeft(Player) + Player.ActualWidth / 2;
-            //Player_y = Canvas.GetTop(Player) + Player.ActualHeight / 2; 
-            Mouse_x = Mouse.GetPosition(Application.Current.MainWindow).X;
-            Mouse_y = Mouse.GetPosition(Application.Current.MainWindow).Y;
+            Mouse_x = Mouse.GetPosition(MyGame).X;
+            Mouse_y = Mouse.GetPosition(MyGame).Y;
             CalculateAngle();
 
             //Makes player apear on top
@@ -103,14 +104,6 @@ namespace Moja_gra
         private void KeyDown(object sender, KeyEventArgs e)
         {
             Player.PlayerMovement(sender, e);
-            if (e.Key == Key.Q)
-            {
-                ;
-            }
-            if (e.Key == Key.P)
-            {
-                ;
-            }
         }
     }
 }
