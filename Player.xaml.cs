@@ -70,9 +70,10 @@ namespace Moja_gra
 
             if (!IsOnGround && !TouchingDown)
             {
-                if((TouchingLeft && Keyboard.IsKeyDown(Key.A)) || (TouchingRight && Keyboard.IsKeyDown(Key.D)))
+                if((TouchingLeft || TouchingRight) && Vy > 0)
                 {
-                    Vy += Gravity / 4;
+                    Vy += Gravity / 10;
+                    if(Vy > 1) { Vy = 1; }
                 }
                 else
                 {
@@ -96,8 +97,8 @@ namespace Moja_gra
                 double xDiff = Canvas.GetLeft(this) - Canvas.GetLeft(Obstacle);
                 double yDiff = Canvas.GetTop(this) - Canvas.GetTop(Obstacle);
 
-                Canvas.SetLeft(Obstacle, NewPlayerPosition.X + xDiff);
-                Canvas.SetTop(Obstacle, NewPlayerPosition.Y + yDiff);
+                Canvas.SetLeft(Obstacle, NewPlayerPosition.X - xDiff);
+                Canvas.SetTop(Obstacle, NewPlayerPosition.Y - yDiff);
             }
          
             Canvas.SetLeft(this, NewPlayerPosition.X);
@@ -140,7 +141,7 @@ namespace Moja_gra
         {
             if(IsOnGround && TouchingDown == true)
             {
-                Canvas.SetTop(this, Canvas.GetTop(this) - Gravity);
+                Canvas.SetTop(this, Canvas.GetTop(this) - Gravity - 1);
                 //foreach (Rectangle Obstacle in MainWindow.Obstacles)
                 //{
                 //    Canvas.SetTop(Obstacle, Canvas.GetTop(Obstacle) + Gravity);
@@ -294,9 +295,9 @@ namespace Moja_gra
                                 TouchingRight = true;
                             }
                         }
+                        // Collision along the Y axis.
                         else
                         {
-                            // Collision along the Y axis.
                             if (depthY > 0)
                             {
                                 // Top side collision
@@ -304,13 +305,12 @@ namespace Moja_gra
                                 Canvas.SetTop(this, Canvas.GetTop(Obstacle) + Obstacle.ActualHeight);
                                 Vy = 0;
                                 TouchingTop = true;
-
                             }
                             if (depthY < 0)
                             {
                                 // Bottom side collision
                                 //MessageBox.Show("dol");
-                                Canvas.SetTop(this, Canvas.GetTop(Obstacle) - this.ActualHeight + Gravity);
+                                Canvas.SetTop(this, Canvas.GetTop(Obstacle) - this.ActualHeight + Gravity + 1);
 
                                 ////double difference = Canvas.GetTop(this) + this.ActualHeight / 2 - Canvas.GetTop(obstacle);
                                 //foreach (Rectangle obstacle in MainWindow.Obstacles)
