@@ -57,15 +57,17 @@ namespace Moja_gra
                 Vy = 0;
                 MainWindow.IsTouching = true;
             }
-            //foreach (Rectangle Obstacle in MainWindow.Obstacles)
-            //{
-            //    Canvas.SetLeft(Obstacle, Canvas.GetLeft(Obstacle) - Vx);
-            //    Canvas.SetTop(Obstacle, Canvas.GetTop(Obstacle) - Vy);
-            //}
-            Canvas.SetLeft(this, Canvas.GetLeft(this) + Vx);
-            Canvas.SetTop(this, Canvas.GetTop(this) + Vy);
+
+            //Canvas.SetLeft(this, Canvas.GetLeft(this) + Vx);
+            //Canvas.SetTop(this, Canvas.GetTop(this) + Vy);
+            foreach (Rectangle Obstacle in MainWindow.Obstacles)
+            {
+                Canvas.SetLeft(Obstacle, Canvas.GetLeft(Obstacle) - Vx);
+                Canvas.SetTop(Obstacle, Canvas.GetTop(Obstacle) - Vy);
+            }
             //IsOnGround = true;
             UpdateTouching();
+
             if (!IsOnGround && !TouchingDown)
             {
                 if((TouchingLeft && Keyboard.IsKeyDown(Key.A)) || (TouchingRight && Keyboard.IsKeyDown(Key.D)))
@@ -84,6 +86,22 @@ namespace Moja_gra
 
             Player_x = Canvas.GetLeft(this);
             Player_y = Canvas.GetTop(this);
+        }
+
+        public void UpdateCamera(Size size)
+        {
+            Point NewPlayerPosition = new Point(size.Width / 2, size.Height / 2);
+            foreach (Rectangle Obstacle in MainWindow.Obstacles)
+            {
+                double xDiff = Canvas.GetLeft(this) - Canvas.GetLeft(Obstacle);
+                double yDiff = Canvas.GetTop(this) - Canvas.GetTop(Obstacle);
+
+                Canvas.SetLeft(Obstacle, NewPlayerPosition.X + xDiff);
+                Canvas.SetTop(Obstacle, NewPlayerPosition.Y + yDiff);
+            }
+         
+            Canvas.SetLeft(this, NewPlayerPosition.X);
+            Canvas.SetTop(this, NewPlayerPosition.Y);
         }
 
         public void createPlayer(double x, double y)
@@ -120,7 +138,7 @@ namespace Moja_gra
         }
         private void Jump()
         {
-            if(IsOnGround == true)
+            if(IsOnGround && TouchingDown == true)
             {
                 Canvas.SetTop(this, Canvas.GetTop(this) - Gravity);
                 //foreach (Rectangle Obstacle in MainWindow.Obstacles)

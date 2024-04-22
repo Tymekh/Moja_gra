@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:Moja_gra"
         mc:Ignorable="d"
         WindowStyle="ToolWindow"
-        Height="490" 
-        Width="815"
+        Height="{Binding WindowHeight}" 
+        Width="{Binding WindowWidth}"
         Background="Black"
         Title="Moja Gra">
     <Grid Background="Blue" Width="{Binding WindowWidth}" Height="{Binding WindowHeight}">

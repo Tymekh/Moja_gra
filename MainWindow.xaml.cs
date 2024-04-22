@@ -41,6 +41,7 @@ namespace Moja_gra
         public MainWindow()
         {
             InitializeComponent();
+            this.SizeChanged += OnWindowSizeChanged;
             MyCanvas = MyGame;
 
             foreach (Rectangle r in MyCanvas.Children.OfType<Rectangle>())
@@ -55,10 +56,17 @@ namespace Moja_gra
             MyGame.Focus();
             //bullet = new Bullet(MyGame);
             Player gracz = new Player();
-            gracz.createPlayer(400, 200);
+            gracz.createPlayer(300, 200);
             Player = gracz;
             Gun = new Gun(Player);
             Gun.createGun();
+        }
+
+        private void OnWindowSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            WindowWidth = e.NewSize.Width;
+            WindowHeight = e.NewSize.Height;
+            Player.UpdateCamera(e.NewSize);
         }
 
         private void MyGame_LeftClick(object sender, MouseButtonEventArgs e)
