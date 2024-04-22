@@ -27,16 +27,26 @@ namespace Moja_gra
         public static Canvas MyCanvas;
         public static Player Player;
         public static double Mouse_x, Mouse_y;
+        public static List<Rectangle> Obstacles = new List<Rectangle>();
         public static Rectangle Podloga;
+        public static bool IsTouching;
+        private double HigestVy;
 
         public Bullet bullet { get; }
         public Gun Gun { get; }
+
+        public double WindowWidth { get; set; }
+        public double WindowHeight { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
             MyCanvas = MyGame;
 
+            foreach (Rectangle r in MyCanvas.Children.OfType<Rectangle>())
+            {
+                Obstacles.Add(r);
+            }
             Podloga = Floor;
             DispatcherTimer gameTimer = new DispatcherTimer();
             gameTimer.Tick += gameTimer_tick;
@@ -45,7 +55,7 @@ namespace Moja_gra
             MyGame.Focus();
             //bullet = new Bullet(MyGame);
             Player gracz = new Player();
-            gracz.createPlayer(100, 100);
+            gracz.createPlayer(400, 200);
             Player = gracz;
             Gun = new Gun(Player);
             Gun.createGun();
@@ -53,7 +63,7 @@ namespace Moja_gra
 
         private void MyGame_LeftClick(object sender, MouseButtonEventArgs e)
         {
-            Linia linia = new Linia();
+            //Linia linia = new Linia();
             //linia.draw_Linia(MyGame, (int)Canvas.GetLeft(Player) + 25, (int)Canvas.GetTop(Player) + 25, (int)Mouse.GetPosition(Application.Current.MainWindow).X, (int)Mouse.GetPosition(Application.Current.MainWindow).Y);
             //CalculateAngle();
             Point position = e.GetPosition(MyGame);
@@ -70,6 +80,7 @@ namespace Moja_gra
             double y1 = Canvas.GetTop(Player);
             double x2 = Mouse_x;
             double y2 = Mouse_y;
+            HigestVy = Player.Vy < HigestVy ? HigestVy = Player.Vy : HigestVy = HigestVy;
             angle = Math.Atan2((y2 - y1), (x2 - x1));
             stats += angle.ToString();
             stats += "\n";
@@ -85,6 +96,14 @@ namespace Moja_gra
             stats += "A: " + Keyboard.IsKeyDown(Key.A) + "\n";
             stats += "S: " + Keyboard.IsKeyDown(Key.S) + "\n";
             stats += "D: " + Keyboard.IsKeyDown(Key.D) + "\n";
+            stats += "IsTouching: " + IsTouching + "\n"; 
+            stats += "Obstacles count: "+ Obstacles.Count() +"\n";
+            stats += "IsOnGround: " + Player.IsOnGround + "\n";
+            stats += "TouchingLeft: " + Player.TouchingLeft + "\n";
+            stats += "TouchingRight: " + Player.TouchingRight + "\n";
+            stats += "TouchingTop: " + Player.TouchingTop + "\n";
+            stats += "TouchingDown: " + Player.TouchingDown + "\n";
+            stats += "higest negative Vx: " + HigestVy.ToString() + "\n";
             tekst.Text = stats;
             return angle;
         }
@@ -104,6 +123,10 @@ namespace Moja_gra
         private void KeyDown(object sender, KeyEventArgs e)
         {
             Player.PlayerMovement(sender, e);
+            if (Keyboard.IsKeyDown(Key.Q))
+            {
+                ;
+            }
         }
     }
 }
