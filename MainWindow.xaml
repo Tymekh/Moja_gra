@@ -11,7 +11,7 @@
         Background="Black"
         Title="Moja Gra">
     <Grid Background="Blue" Width="{Binding WindowWidth}" Height="{Binding WindowHeight}">
-        <Canvas Background="AntiqueWhite" x:Name="MyGame" Focusable="True" KeyDown="KeyDown" Height="{Binding WindowWidth}" Width="{Binding WindowHeight}" MouseLeftButtonDown="MyGame_LeftClick">
+        <Canvas Background="AntiqueWhite" x:Name="MyGame" Focusable="True" KeyDown="KeyDown" Height="{Binding WindowWidth}" Width="{Binding WindowHeight}" MouseLeftButtonDown="MyGame_LeftClick" MouseRightButtonDown="MyGame_MouseRightButtonDown">
             <TextBlock x:Name="tekst" Width="200" Height="300"></TextBlock>
             <Rectangle x:Name="Floor"  Width="8000" Height="20" Fill="Black" Canvas.Left="-4000" Canvas.Top="430"></Rectangle>
             <Rectangle Canvas.Left="700" Canvas.Top="217" Height="50" Width="50" Fill="Black"></Rectangle>

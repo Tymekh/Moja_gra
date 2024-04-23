@@ -1,0 +1,15 @@
+﻿<Window x:Class="Moja_gra.Log"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Moja_gra"
+        mc:Ignorable="d"
+        Title="Log" Height="auto" Width="auto" SizeToContent="WidthAndHeight">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock x:Name="tekst" Height="auto" Width="auto" Background="LightBlue"/>
+    </Grid>
+</Window>

@@ -51,12 +51,6 @@ namespace Moja_gra
         private void MovementTick(object? sender, EventArgs e)
         {
             CheckAllColisions();
-            if (IsTouching)
-            {
-                Vx = 0;
-                Vy = 0;
-                MainWindow.IsTouching = true;
-            }
 
             //Canvas.SetLeft(this, Canvas.GetLeft(this) + Vx);
             //Canvas.SetTop(this, Canvas.GetTop(this) + Vy);
@@ -67,6 +61,7 @@ namespace Moja_gra
             }
             //IsOnGround = true;
             UpdateTouching();
+            MainWindow.IsTouching = IsTouching ? MainWindow.IsTouching = true : MainWindow.IsTouching = false;
 
             if (!IsOnGround && !TouchingDown)
             {
@@ -81,9 +76,11 @@ namespace Moja_gra
                 }
             }
 
-            if (Vx < 0) Vx += HorizontalMovementReduce;
-            if (Vx > 0) Vx -= HorizontalMovementReduce;
-            if (-HorizontalMovementReduce < Vx && Vx < HorizontalMovementReduce) Vx = 0;
+
+            double UpdatedHorizontalMovementReduce = HorizontalMovementReduce + Math.Pow(Vx,2) / 1000;
+            if (Vx < 0) Vx += UpdatedHorizontalMovementReduce;
+            if (Vx > 0) Vx -= UpdatedHorizontalMovementReduce;
+            if (-UpdatedHorizontalMovementReduce < Vx && Vx < UpdatedHorizontalMovementReduce) Vx = 0;
 
             Player_x = Canvas.GetLeft(this);
             Player_y = Canvas.GetTop(this);
@@ -198,6 +195,7 @@ namespace Moja_gra
 
         private void UpdateTouching()
         {
+            IsTouching = false;
             foreach (Rectangle Obstacle in MainWindow.Obstacles)
             {
                 if (CheckTouching(down, Obstacle))
@@ -276,12 +274,6 @@ namespace Moja_gra
                             if (depthX > 0)
                             {
                                 // Left side collision
-                                //MessageBox.Show("Lewo");
-                                //foreach (Rectangle obstacle in MainWindow.Obstacles)
-                                //{
-                                //    Canvas.SetLeft(obstacle, Canvas.GetLeft(obstacle) - 3);
-                                //}
-
                                 Canvas.SetLeft(this, Canvas.GetLeft(Obstacle) + this.ActualWidth - 3);
                                 Vx = 0;
                                 TouchingLeft = true;
@@ -289,7 +281,6 @@ namespace Moja_gra
                             if (depthX < 0)
                             {
                                 // Right side collision
-                                //MessageBox.Show("Prawo");
                                 Canvas.SetLeft(this, Canvas.GetLeft(Obstacle) - this.ActualWidth + 1);
                                 Vx = 0;
                                 TouchingRight = true;
@@ -301,22 +292,14 @@ namespace Moja_gra
                             if (depthY > 0)
                             {
                                 // Top side collision
-                                //MessageBox.Show("gora");
-                                Canvas.SetTop(this, Canvas.GetTop(Obstacle) + Obstacle.ActualHeight);
+                                Canvas.SetTop(this, Canvas.GetTop(Obstacle) + Obstacle.ActualHeight + 1);
                                 Vy = 0;
                                 TouchingTop = true;
                             }
                             if (depthY < 0)
                             {
                                 // Bottom side collision
-                                //MessageBox.Show("dol");
                                 Canvas.SetTop(this, Canvas.GetTop(Obstacle) - this.ActualHeight + Gravity + 1);
-
-                                ////double difference = Canvas.GetTop(this) + this.ActualHeight / 2 - Canvas.GetTop(obstacle);
-                                //foreach (Rectangle obstacle in MainWindow.Obstacles)
-                                //{
-                                //    Canvas.SetTop(obstacle, Canvas.GetTop(obstacle) - Vy);
-                                //}
 
                                 Vy = 0;
                                 IsOnGround = true;

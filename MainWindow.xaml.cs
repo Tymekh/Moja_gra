@@ -30,7 +30,7 @@ namespace Moja_gra
         public static List<Rectangle> Obstacles = new List<Rectangle>();
         public static Rectangle Podloga;
         public static bool IsTouching;
-        private double HigestVy;
+        private static double HigestVy;
 
         public Bullet bullet { get; }
         public Gun Gun { get; }
@@ -60,6 +60,8 @@ namespace Moja_gra
             Player = gracz;
             Gun = new Gun(Player);
             Gun.createGun();
+            Log log = new Log();
+            log.Show();
         }
 
         private void OnWindowSizeChanged(object sender, SizeChangedEventArgs e)
@@ -77,7 +79,19 @@ namespace Moja_gra
             Point position = e.GetPosition(MyGame);
             //bullet.createRectangle(Canvas.GetLeft(Player)+25,Canvas.GetTop(Player)+25,position.X, position.Y
             Gun.Shot();
-
+        }
+        private void MyGame_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Rectangle rect = new Rectangle
+            {
+                Width = 50,
+                Height = 50,
+                Fill = Brushes.Black,
+            };
+            Canvas.SetLeft(rect, e.GetPosition(MyGame).X);
+            Canvas.SetTop(rect, e.GetPosition(MyGame).Y);
+            Obstacles.Add(rect);
+            MyCanvas.Children.Add(rect);
         }
 
         private double CalculateAngle()
@@ -90,16 +104,13 @@ namespace Moja_gra
             double y2 = Mouse_y;
             HigestVy = Player.Vy < HigestVy ? HigestVy = Player.Vy : HigestVy = HigestVy;
             angle = Math.Atan2((y2 - y1), (x2 - x1));
-            stats += angle.ToString();
-            stats += "\n";
-            angle = angle * 180 / Math.PI;
-            stats += angle.ToString();
-            stats += "\n";
-            stats += Bullet.bulletList.Count.ToString();
-            stats += "\n";
+            double angleDegrees = angle * 180 / Math.PI;
+            stats += "-----------------------------------------\n";
+            stats += "Angle in rad: "+angle.ToString() + "\n";
+            stats += "Angle: " + angle.ToString() + "\n";
+            stats += "Bullet Count: " + Bullet.bulletList.Count.ToString() + "\n";
             stats += "Vx: " + Player.Vx.ToString() + "\n";
             stats += "Vy: " + Player.Vy.ToString() + "\n";
-            stats += "\n";
             stats += "W: " + Keyboard.IsKeyDown(Key.W) + "\n";
             stats += "A: " + Keyboard.IsKeyDown(Key.A) + "\n";
             stats += "S: " + Keyboard.IsKeyDown(Key.S) + "\n";
@@ -112,7 +123,7 @@ namespace Moja_gra
             stats += "TouchingTop: " + Player.TouchingTop + "\n";
             stats += "TouchingDown: " + Player.TouchingDown + "\n";
             stats += "higest negative Vx: " + HigestVy.ToString() + "\n";
-            tekst.Text = stats;
+            Log.Stats = stats;
             return angle;
         }
 
