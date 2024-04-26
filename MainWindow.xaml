@@ -12,15 +12,13 @@
         Title="Moja Gra">
     <Grid Background="Blue" Width="{Binding WindowWidth}" Height="{Binding WindowHeight}">
         <Canvas Background="AntiqueWhite" x:Name="MyGame" Focusable="True" KeyDown="KeyDown" Height="{Binding WindowWidth}" Width="{Binding WindowHeight}" MouseLeftButtonDown="MyGame_LeftClick" MouseRightButtonDown="MyGame_MouseRightButtonDown">
-            <TextBlock x:Name="tekst" Width="200" Height="300"></TextBlock>
-            <Rectangle x:Name="Floor"  Width="8000" Height="20" Fill="Black" Canvas.Left="-4000" Canvas.Top="430"></Rectangle>
-            <Rectangle Canvas.Left="700" Canvas.Top="217" Height="50" Width="50" Fill="Black"></Rectangle>
-            <Rectangle Canvas.Left="612" Canvas.Top="325" Height="50" Width="69" Fill="Black"></Rectangle>
-            <Rectangle Canvas.Left="750" Canvas.Top="10" Height="440" Width="50" Fill="Black"></Rectangle>
-            <Rectangle Canvas.Left="562" Canvas.Top="59" Height="316" Width="50" Fill="Black"></Rectangle>
+            <Rectangle Canvas.Left="-4000" Canvas.Top="430" Width="8000" Height="20" Fill="Black"/>
+            <Rectangle Canvas.Left="700" Canvas.Top="217" Height="50" Width="50" Fill="Black"/>
+            <Rectangle Canvas.Left="612" Canvas.Top="325" Height="50" Width="69" Fill="Black"/>
+            <Rectangle Canvas.Left="750" Canvas.Top="10" Height="440" Width="50" Fill="Black"/>
+            <Rectangle Canvas.Left="562" Canvas.Top="59" Height="316" Width="50" Fill="Black"/>
             <Rectangle Canvas.Left="617" Canvas.Top="100" Height="50" Width="50" Fill="Black"/>
-            <Rectangle Canvas.Left="200" Canvas.Top="150" Height="300" Width="50" Fill="Black"/>
-            <!-- <Rectangle x:Name="Player" Width="50" Height="50" Fill="DarkSlateBlue" Canvas.Left="100" Canvas.Top="100"></Rectangle> -->
+            <Rectangle Canvas.Left="200" Canvas.Top="-2550" Height="3000" Width="50" Fill="Black"/>
         </Canvas>
     </Grid>
 </Window>

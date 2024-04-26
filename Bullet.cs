@@ -26,7 +26,7 @@ namespace Moja_gra
         private void bulletTimerStart()
         {
             bulletTimer = new DispatcherTimer();
-            bulletTimer.Interval = TimeSpan.FromMilliseconds(1);
+            bulletTimer.Interval = TimeSpan.FromSeconds((double)1/60);
             bulletTimer.Tick += bulletTimer_Tick;
             bulletTimer.Start();
         }

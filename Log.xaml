@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Moja_gra"
         mc:Ignorable="d"
+        WindowStyle="ToolWindow"
         Title="Log" Height="auto" Width="auto" SizeToContent="WidthAndHeight">
     <Grid>
         <Grid.ColumnDefinitions>

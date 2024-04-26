@@ -28,7 +28,6 @@ namespace Moja_gra
         public static Player Player;
         public static double Mouse_x, Mouse_y;
         public static List<Rectangle> Obstacles = new List<Rectangle>();
-        public static Rectangle Podloga;
         public static bool IsTouching;
         private static double HigestVy;
 
@@ -48,7 +47,6 @@ namespace Moja_gra
             {
                 Obstacles.Add(r);
             }
-            Podloga = Floor;
             DispatcherTimer gameTimer = new DispatcherTimer();
             gameTimer.Tick += gameTimer_tick;
             gameTimer.Interval = TimeSpan.FromMilliseconds(1);
@@ -58,7 +56,7 @@ namespace Moja_gra
             Player gracz = new Player();
             gracz.createPlayer(300, 200);
             Player = gracz;
-            Gun = new Gun(Player);
+            Gun = new Gun(Player, 1);
             Gun.createGun();
             Log log = new Log();
             log.Show();

@@ -34,6 +34,7 @@ namespace Moja_gra
         public bool IsOnGround = false;
         public bool TouchingLeft, TouchingRight, TouchingDown, TouchingTop;
         private bool IsTouching = false;
+        private double UpdatedPlayerSpeed;
 
         public Player()
         {
@@ -50,6 +51,7 @@ namespace Moja_gra
 
         private void MovementTick(object? sender, EventArgs e)
         {
+            UpdatedPlayerSpeed = Math.Pow((PlayerSpeed/10)-0.5, 2) + 1;
             CheckAllColisions();
 
             //Canvas.SetLeft(this, Canvas.GetLeft(this) + Vx);
@@ -82,6 +84,16 @@ namespace Moja_gra
             if (Vx > 0) Vx -= UpdatedHorizontalMovementReduce;
             if (-UpdatedHorizontalMovementReduce < Vx && Vx < UpdatedHorizontalMovementReduce) Vx = 0;
 
+            if (Vy > 20)
+            {
+                Vy -= Gravity;
+            }
+            if(Vy < -20)
+            {
+                Vy += Gravity;
+            }
+            //Vy = Vy < -20 || Vy > 20 ? Vy -= Gravity : Vy += Gravity;
+
             Player_x = Canvas.GetLeft(this);
             Player_y = Canvas.GetTop(this);
         }
@@ -111,28 +123,28 @@ namespace Moja_gra
 
         public void PlayerMovement(object sender, KeyEventArgs e)
         {
-            if (Keyboard.IsKeyDown(Key.A) && !TouchingLeft) goLeft();
-            if (Keyboard.IsKeyDown(Key.D) && !TouchingRight) goRight();
-            if (Keyboard.IsKeyDown(Key.W) && TouchingDown) Jump();
+            if (Keyboard.IsKeyDown(Key.A)) goLeft();
+            if (Keyboard.IsKeyDown(Key.D)) goRight();
+            if (Keyboard.IsKeyDown(Key.W)) Jump();
             //if (e.Key == Key.S) Down();
         }
         private void goLeft()
         {
-            Canvas.SetLeft(this, Canvas.GetLeft(this) - PlayerSpeed);
-            //foreach (Rectangle Obstacle in MainWindow.Obstacles)
-            //{
-            //    Canvas.SetLeft(Obstacle, Canvas.GetLeft(Obstacle) + PlayerSpeed);
-            //}
-            Vx -= PlayerSpeed;
+            if (!TouchingLeft)
+            {
+                Canvas.SetLeft(this, Canvas.GetLeft(this) - PlayerSpeed);
+                //Vx -= PlayerSpeed;
+                Vx -= UpdatedPlayerSpeed;
+            }
         }
         private void goRight()
         {
-            Canvas.SetLeft(this, Canvas.GetLeft(this) + PlayerSpeed);
-            //foreach (Rectangle Obstacle in MainWindow.Obstacles)
-            //{
-            //    Canvas.SetLeft(Obstacle, Canvas.GetLeft(Obstacle) - PlayerSpeed);
-            //}
-            Vx += PlayerSpeed;
+            if(!TouchingRight)
+            {
+                Canvas.SetLeft(this, Canvas.GetLeft(this) + PlayerSpeed);
+                //Vx += PlayerSpeed;
+                Vx += UpdatedPlayerSpeed;
+            }
         }
         private void Jump()
         {
@@ -145,6 +157,18 @@ namespace Moja_gra
                 //}
                 Vy -= JumpPower;
                 //IsOnGround = false;
+            }
+            if (TouchingLeft)
+            {
+                Canvas.SetLeft(this, Canvas.GetLeft(this) + 1);
+                Vy -= JumpPower;
+                Vx += 5;
+            }
+            if (TouchingRight)
+            {
+                Canvas.SetLeft(this, Canvas.GetLeft(this) - 1);
+                Vy -= JumpPower;
+                Vx -= 5;
             }
         }
 
