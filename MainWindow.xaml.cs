@@ -105,7 +105,7 @@ namespace Moja_gra
             double angleDegrees = angle * 180 / Math.PI;
             stats += "-----------------------------------------\n";
             stats += "Angle in rad: "+angle.ToString() + "\n";
-            stats += "Angle: " + angle.ToString() + "\n";
+            stats += "Angle: " + angleDegrees.ToString() + "\n";
             stats += "Bullet Count: " + Bullet.bulletList.Count.ToString() + "\n";
             stats += "Vx: " + Player.Vx.ToString() + "\n";
             stats += "Vy: " + Player.Vy.ToString() + "\n";

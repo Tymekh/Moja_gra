@@ -1,4 +1,5 @@
-﻿using System;
+﻿using monkeyTowerDefenceTD7;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,10 +26,11 @@ namespace Moja_gra
         double angle;
         Rectangle GunRectangle;
         private Bullet bullet;
-        FrameworkElement Parent;
+        Player Parent;
         private int id;
+        private Random random = new Random();
 
-        public Gun(FrameworkElement parent, int id)
+        public Gun(Player parent, int id)
         {
             InitializeComponent();
             this.id = id;
@@ -125,8 +127,31 @@ namespace Moja_gra
                 double GunRectangleCentre_Y = Canvas.GetTop(GunRectangle) + GunRectangle.Height / 2;
 
                 Point point = new Point(GunRectangleCentre_X, GunRectangleCentre_Y);
-                bullet.createBullet(point, angle);
+
+                switch (id)
+                {
+                    case 0:
+                        Pociski.Shot(point, 20, 10, 10, angle);
+                        return; 
+                    case 1:
+                        Pociski.Shot(point, 20, 10, 10, angle + RandomAngleVariaton());
+                        Pociski.Shot(point, 20, 10, 10, angle + RandomAngleVariaton());
+                        Pociski.Shot(point, 20, 10, 10, angle + RandomAngleVariaton());
+                        double Knockback = 25;
+
+                        double VxMovement = Math.Cos(angle) * Knockback;
+                        double VyMovement = Math.Sin(angle) * Knockback;
+
+                        Parent.Vx -= VxMovement;
+                        Parent.Vy -= VyMovement;
+                        return;
+                }
             }
+        }
+        private double RandomAngleVariaton()
+        {
+            double AngleVariation = (random.NextDouble() - 0.5) / 2;
+            return AngleVariation;
         }
         private double CalculateAngle(Point point1, Point point2) // oblicza kąt pomiędzy elementami
         {

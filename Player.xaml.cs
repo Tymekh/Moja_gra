@@ -69,8 +69,8 @@ namespace Moja_gra
             {
                 if((TouchingLeft || TouchingRight) && Vy > 0)
                 {
-                    Vy += Gravity / 10;
-                    if(Vy > 1) { Vy = 1; }
+                    Vy += Math.Sqrt(Gravity)/100;
+                    //if(Vy > 1) { Vy = 1; }
                 }
                 else
                 {
