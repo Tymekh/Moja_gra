@@ -118,33 +118,38 @@ namespace Moja_gra
         {
             if (GunRectangle != null)
             {
-                Point ParentPosition = new Point(Canvas.GetLeft(Parent) + Parent.ActualWidth / 2, Canvas.GetTop(Parent) + Parent.ActualHeight / 2);
-                Point MousePosition = new Point(MainWindow.Mouse_x, MainWindow.Mouse_y);
-
-                double angle = CalculateAngle(ParentPosition, MousePosition);
-
-                double GunRectangleCentre_X = Canvas.GetLeft(GunRectangle) + GunRectangle.Width / 2;
-                double GunRectangleCentre_Y = Canvas.GetTop(GunRectangle) + GunRectangle.Height / 2;
-
-                Point point = new Point(GunRectangleCentre_X, GunRectangleCentre_Y);
-
-                switch (id)
+                if (MainWindow.Player.ShotsRemaining >= 1)
                 {
-                    case 0:
-                        Pociski.Shot(point, 20, 10, 10, angle);
-                        return; 
-                    case 1:
-                        Pociski.Shot(point, 20, 10, 10, angle + RandomAngleVariaton());
-                        Pociski.Shot(point, 20, 10, 10, angle + RandomAngleVariaton());
-                        Pociski.Shot(point, 20, 10, 10, angle + RandomAngleVariaton());
-                        double Knockback = 25;
+                    MainWindow.Player.ShotsRemaining -= 1;
+                    Point ParentPosition = new Point(Canvas.GetLeft(Parent) + Parent.ActualWidth / 2, Canvas.GetTop(Parent) + Parent.ActualHeight / 2);
+                    Point MousePosition = new Point(MainWindow.Mouse_x, MainWindow.Mouse_y);
 
-                        double VxMovement = Math.Cos(angle) * Knockback;
-                        double VyMovement = Math.Sin(angle) * Knockback;
+                    double angle = CalculateAngle(ParentPosition, MousePosition);
 
-                        Parent.Vx -= VxMovement;
-                        Parent.Vy -= VyMovement;
-                        return;
+                    double GunRectangleCentre_X = Canvas.GetLeft(GunRectangle) + GunRectangle.Width / 2;
+                    double GunRectangleCentre_Y = Canvas.GetTop(GunRectangle) + GunRectangle.Height / 2;
+
+                    Point point = new Point(GunRectangleCentre_X, GunRectangleCentre_Y);
+
+                    switch (id)
+                    {
+                        case 0:
+                            Pociski.Shot(point, 20, 10, 10, angle);
+                            return; 
+                        case 1:
+                            Pociski.Shot(point, 20, 10, 10, angle + RandomAngleVariaton());
+                            Pociski.Shot(point, 20, 10, 10, angle + RandomAngleVariaton());
+                            Pociski.Shot(point, 20, 10, 10, angle + RandomAngleVariaton());
+
+                            double Knockback = 10;
+
+                            double VxMovement = Math.Cos(angle) * Knockback;
+                            double VyMovement = Math.Sin(angle) * Knockback;
+
+                            Parent.Vx -= VxMovement;
+                            Parent.Vy -= VyMovement;
+                            return;
+                    }
                 }
             }
         }

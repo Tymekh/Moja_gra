@@ -5,12 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Moja_gra"
              mc:Ignorable="d" 
-             d:DesignHeight="52" d:DesignWidth="52">
+             d:DesignHeight="50" d:DesignWidth="50">
     <Grid>
-        <Rectangle Width="50" Height="50" Fill="Green"></Rectangle>
-        <Rectangle x:Name="top" Height="1" Width="50" Margin="0 0 0 51" Fill="Transparent"/>
-        <Rectangle x:Name="down" Height="1" Width="50" Margin="0 51 0 0" Fill="Transparent"/>
-        <Rectangle x:Name="left" Height="50" Width="1" Margin="0 0 51 0" Fill="Transparent"/>
-        <Rectangle x:Name="right" Height="50" Width="1" Margin="51 0 0 0" Fill="Transparent"/>
+        <Rectangle Width="48" Height="48" Fill="Green"></Rectangle>
+        <Rectangle x:Name="top" Height="1" Width="50" Margin="0 0 0 49" Fill="Green"/>
+        <Rectangle x:Name="down" Height="1" Width="50" Margin="0 49 0 0" Fill="Green"/>
+        <Rectangle x:Name="left" Height="50" Width="1" Margin="0 0 49 0" Fill="Green"/>
+        <Rectangle x:Name="right" Height="50" Width="1" Margin="49 0 0 0" Fill="Green"/>
     </Grid>
 </UserControl>

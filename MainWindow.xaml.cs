@@ -30,6 +30,7 @@ namespace Moja_gra
         public static List<Rectangle> Obstacles = new List<Rectangle>();
         public static bool IsTouching;
         private static double HigestVy;
+        public static Rectangle Coin;
 
         public Bullet bullet { get; }
         public Gun Gun { get; }
@@ -45,7 +46,10 @@ namespace Moja_gra
 
             foreach (Rectangle r in MyCanvas.Children.OfType<Rectangle>())
             {
-                Obstacles.Add(r);
+                if((string)r.Tag == "obstacle")
+                {
+                    Obstacles.Add(r);
+                }
             }
             DispatcherTimer gameTimer = new DispatcherTimer();
             gameTimer.Tick += gameTimer_tick;
@@ -54,19 +58,20 @@ namespace Moja_gra
             MyGame.Focus();
             //bullet = new Bullet(MyGame);
             Player gracz = new Player();
-            gracz.createPlayer(300, 200);
+            gracz.createPlayer(520, 370);
             Player = gracz;
             Gun = new Gun(Player, 1);
             Gun.createGun();
             Log log = new Log();
-            log.Show();
+            //log.Show();
+            Coin = coin;
         }
 
         private void OnWindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
             WindowWidth = e.NewSize.Width;
             WindowHeight = e.NewSize.Height;
-            Player.UpdateCamera(e.NewSize);
+            Player.UpdateSize(e.NewSize);
         }
 
         private void MyGame_LeftClick(object sender, MouseButtonEventArgs e)
