@@ -1,116 +1,152 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
+using System.Linq;
+using System.Reflection.Metadata;
+using System.Security.Cryptography.Xml;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using static System.Net.Mime.MediaTypeNames;
+using System.Drawing;
+using Rectangle = System.Windows.Shapes.Rectangle;
+using Point = System.Windows.Point;
+using System.Windows.Media.Imaging;
+using Moja_gra;
 
 namespace Moja_gra
 {
-    public class Bullet
+    public static class Bullet
     {
-        private DispatcherTimer bulletTimer = new DispatcherTimer();
-        private Rectangle projectile1;
-        //double angle;
-        public static List<Rectangle> bulletList = new List<Rectangle>();
-        List<double> bulletAngleList = new List<double>();
-        private int BulletSpeed = 7;
-
-        public Bullet()
+        private static DispatcherTimer BulletTimer = new DispatcherTimer();
+        public static List<Bullets> BulletList = new List<Bullets>();
+        private static Canvas canvas;
+        public class Bullets // lista właściwości pocisków
         {
-            bulletTimerStart();
+            public Rectangle Bullet { get; set; }
+            public double Lifetime { get; set; }
+            public double LifetimeLimit { get; set; }
+            public int Dmg { get; set; }
+            public double Angle { get; set; }
         }
-
-        private void bulletTimerStart()
+        private static void BulletTimer_Tick(object? sender, EventArgs e) // timer dla pocisków
         {
-            bulletTimer = new DispatcherTimer();
-            bulletTimer.Interval = TimeSpan.FromSeconds((double)1/60);
-            bulletTimer.Tick += bulletTimer_Tick;
-            bulletTimer.Start();
-        }
-
-        private void bulletTimer_Tick(object? sender, EventArgs e)
-        {
-            if (projectile1 != null)
+            for (int i = 0; i < BulletList.Count; i++) // pętla dla wszyskich pocisków
             {
-                for (int i = 0; i < bulletList.Count; i++)
+                Rectangle Bullet = BulletList[i].Bullet;
+                BulletList[i].Lifetime += (double)1 / 60;
+                int Damage = BulletList[i].Dmg;
+                double Angle = BulletList[i].Angle;
+
+
+                double BulletSpeed = 10; // szybkość pocisku
+
+                double xMovement = Math.Cos(Angle) * BulletSpeed;
+                double yMovement = Math.Sin(Angle) * BulletSpeed;
+
+                Canvas.SetLeft(Bullet, Canvas.GetLeft(Bullet) + xMovement);
+                Canvas.SetTop(Bullet, Canvas.GetTop(Bullet) + yMovement);
+
+
+                //if (CheckColision(Bullet, Target)) // wykonuje się jeśli pocisk dotyka celu
+                //{
+                ////MessageBox.Show("Trafiono");
+                //DeleteBullet(i);
+                //if (Target.CzyZyje) Target.ZadajObrazenia(Damage); // jeśli cel żyje zadaje obrażenia balonowi
+                //continue;
+                //}
+
+                if (BulletList[i].Lifetime > BulletList[i].LifetimeLimit) // Jeśli pocisk żyje dłużej niż określony czas usuwa pocisk
                 {
-                    Rectangle projectile = bulletList[i];
-                    double angle = bulletAngleList[i];
-                    if (isOutsideCanvas(projectile))
-                    {
-                        removeRectangle(projectile, i);
-                    };
-
-                    double xMovement = Math.Cos(angle) * BulletSpeed;
-                    double yMovement = Math.Sin(angle) * BulletSpeed;
-
-                    Canvas.SetLeft(projectile, Canvas.GetLeft(projectile) + xMovement);
-                    Canvas.SetTop(projectile, Canvas.GetTop(projectile) + yMovement);
+                    DeleteBullet(i);
                 }
             }
         }
 
-        public void createBullet(Point point,double angle)
+        public static void Shot(Point StartPoint, double LifetimeLimit, double Size, int Damage, double Angle, int StartingDistance = 0) // "strzela" - towrzy pocisk i dodaje go do listy
         {
-            Rectangle projectile = new Rectangle
+            Rectangle bullet = new Rectangle
             {
-                Width = 10,
-                Height = 10,
-                Fill = Brushes.Black
+                Width = Size,
+                Height = Size,
+                Fill = Brushes.Black,
             };
-            projectile1 = projectile;
+            //BulletList.Add(bullet);
+            //TargetList.Add(target);
+            Panel.SetZIndex(bullet, 2);
+            BulletList.Add(new Bullets // dodaje do listy właściwośći pocisku
+            {
+                Bullet = bullet,
+                Lifetime = 0,
+                LifetimeLimit = LifetimeLimit,
+                Dmg = Damage,
+                Angle = Angle,
+            });
 
-            //double angle = calculateAngle(Player.Player_x, Player.Player_y, MainWindow.Mouse_x, MainWindow.Mouse_y);
-            bulletList.Add(projectile);
-            bulletAngleList.Add(angle);
+            Canvas.SetLeft(bullet, StartPoint.X - bullet.Width / 2);
+            Canvas.SetTop(bullet, StartPoint.Y - bullet.Height / 2);
 
-            double distance = 25;
+            double xMovement = Math.Cos(Angle) * StartingDistance;
+            double yMovement = Math.Sin(Angle) * StartingDistance;
 
-            double xMovement = Math.Cos(angle) * distance;
-            double yMovement = Math.Sin(angle) * distance;
+            Canvas.SetLeft(bullet, Canvas.GetLeft(bullet) + xMovement);
+            Canvas.SetTop(bullet, Canvas.GetTop(bullet) + yMovement);
 
-            double x = point.X - projectile.Width / 2;
-            double y = point.Y - projectile.Height / 2;
+            MainWindow.MyCanvas.Children.Add(bullet);
 
-            Canvas.SetLeft(projectile, x + xMovement);
-            Canvas.SetTop(projectile, y + yMovement);
-
-            MainWindow.MyCanvas.Children.Add(projectile);
+            if (BulletTimer.IsEnabled == false) // sprawdza czy timer jest włączony żeby uniknąć włączania go kilka razy
+            {
+                canvas = MainWindow.MyCanvas;
+                BulletTimer = new DispatcherTimer();
+                BulletTimer.Interval = TimeSpan.FromSeconds((double)1 / 60);
+                BulletTimer.Tick += BulletTimer_Tick;
+                BulletTimer.Start();
+            }
         }
 
-        public bool isOutsideCanvas(Rectangle projectile)
+        private static void DeleteBullet(int id) // usuwa pocisk
         {
-            if (Canvas.GetLeft(projectile) < 0) 
-            {
-                return true;
-            }
-            if(Canvas.GetLeft(projectile) > MainWindow.MyCanvas.Width) 
-            {
-                return true;
-            }
-            if(Canvas.GetTop(projectile) < 0)
-            {
-                return true;
-            }
-            if(Canvas.GetTop(projectile) > MainWindow.MyCanvas.Height)
-            {
-                return true;
-            }
-            return false;
+            canvas.Children.Remove(BulletList[id].Bullet);
+            BulletList.RemoveAt(id);
         }
-        public void removeRectangle(Rectangle projectile, int index) 
+
+        private static bool CheckColision(FrameworkElement point1, FrameworkElement point2) // sprawdza czy 2 elementy się zderzają
         {
-            MainWindow.MyCanvas.Children.Remove(projectile);
-            bulletList.RemoveAt(index);
-            bulletAngleList.RemoveAt(index);
+            if (point1 == null || point2 == null) { return false; }
+
+            var x1 = Canvas.GetLeft(point1);
+            var y1 = Canvas.GetTop(point1);
+
+            Rect HitBox1 = new Rect(x1, y1, point1.ActualWidth, point1.ActualHeight);
+
+            var x2 = Canvas.GetLeft(point2);
+            var y2 = Canvas.GetTop(point2);
+            Rect HitBox2 = new Rect(x2, y2, point2.ActualWidth, point2.ActualHeight);
+
+            if (HitBox1.IntersectsWith(HitBox2))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
-        public double calculateAngle(double x1, double y1, double x2, double y2)
+
+        private static double CalculateAngle(FrameworkElement point1, FrameworkElement point2) // oblicza kąt pomiędzy elementami
         {
-            double angle;
-            angle = Math.Atan2((y2 - y1), (x2 - x1)); //calculate angle in radians
+            if (point1 == null || point2 == null) { return 0; }
+
+            double x1 = Canvas.GetLeft(point1) + point1.ActualWidth / 2;
+            double y1 = Canvas.GetTop(point1) + point1.ActualHeight / 2;
+            double x2 = Canvas.GetLeft(point2) + point2.ActualWidth / 2;
+            double y2 = Canvas.GetTop(point2) + point2.ActualHeight / 2;
+
+            double angle = Math.Atan2((y2 - y1), (x2 - x1));
             return angle;
         }
     }

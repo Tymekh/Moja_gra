@@ -42,7 +42,7 @@ namespace Moja_gra
         private Brush NextYPositionColor = Brushes.Red;
         private Size NewestSize;
         public  int ShotsRemaining = 3;
-        private int MagSize = 1000;
+        private int MagSize = 3;
 
         public Player()
         {
@@ -392,7 +392,7 @@ namespace Moja_gra
                 if(CheckTouching(this, MainWindow.Coin))
                 {
                     MessageBox.Show("wygrałeś");
-                    System.Windows.Application.Current.Shutdown();
+                    Environment.Exit(0);
                 }
                 CheckLeftColision(Obstacle);
                 CheckRightColision(Obstacle);
@@ -410,11 +410,12 @@ namespace Moja_gra
                         IsOnGround = true;
                         TouchingDown = true;
                         ShotsRemaining = MagSize;
+                        MainWindow.Hud.AddBullet(MagSize);
                     }else
                     // top
                     if (Vy < 0)
                     {
-                        Canvas.SetTop(this, Canvas.GetTop(Obstacle) + Obstacle.ActualHeight);
+                        Canvas.SetTop(this, Canvas.GetTop(Obstacle) + Obstacle.ActualHeight + 0.1);
                         Vy = 0;
                         MainWindow.MyCanvas.Children.Remove(NextYPositionRectangle);
                         NextYPositionRectangle = null;

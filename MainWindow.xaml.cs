@@ -26,13 +26,14 @@ namespace Moja_gra
     {
         public static Canvas MyCanvas;
         public static Player Player;
+        public static BulletCounter Hud;
         public static double Mouse_x, Mouse_y;
         public static List<Rectangle> Obstacles = new List<Rectangle>();
         public static bool IsTouching;
         private static double HigestVy;
         public static Rectangle Coin;
 
-        public Bullet bullet { get; }
+        //public Bullet bullet { get; }
         public Gun Gun { get; }
 
         public double WindowWidth { get; set; }
@@ -62,9 +63,11 @@ namespace Moja_gra
             Player = gracz;
             Gun = new Gun(Player, 1);
             Gun.createGun();
-            //Log log = new Log();
-            //log.Show();
+            Log log = new Log();
+            log.Show();
             Coin = coin;
+            BulletCounter Hud = new BulletCounter();
+            MainWindow.Hud = Hud;
         }
 
         private void OnWindowSizeChanged(object sender, SizeChangedEventArgs e)
@@ -76,11 +79,7 @@ namespace Moja_gra
 
         private void MyGame_LeftClick(object sender, MouseButtonEventArgs e)
         {
-            //Linia linia = new Linia();
-            //linia.draw_Linia(MyGame, (int)Canvas.GetLeft(Player) + 25, (int)Canvas.GetTop(Player) + 25, (int)Mouse.GetPosition(Application.Current.MainWindow).X, (int)Mouse.GetPosition(Application.Current.MainWindow).Y);
-            //CalculateAngle();
             Point position = e.GetPosition(MyGame);
-            //bullet.createRectangle(Canvas.GetLeft(Player)+25,Canvas.GetTop(Player)+25,position.X, position.Y
             Gun.Shot();
         }
         private void MyGame_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
@@ -111,7 +110,7 @@ namespace Moja_gra
             stats += "-----------------------------------------\n";
             stats += "Angle in rad: "+angle.ToString() + "\n";
             stats += "Angle: " + angleDegrees.ToString() + "\n";
-            stats += "Bullet Count: " + Bullet.bulletList.Count.ToString() + "\n";
+            stats += "Bullet Count: " + Bullet.BulletList.Count.ToString() + "\n";
             stats += "Vx: " + Player.Vx.ToString() + "\n";
             stats += "Vy: " + Player.Vy.ToString() + "\n";
             stats += "W: " + Keyboard.IsKeyDown(Key.W) + "\n";

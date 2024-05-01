@@ -1,5 +1,4 @@
-﻿using monkeyTowerDefenceTD7;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,7 +24,6 @@ namespace Moja_gra
         private DispatcherTimer GunTimer = new DispatcherTimer();
         double angle;
         Rectangle GunRectangle;
-        private Bullet bullet;
         Player Parent;
         private int id;
         private Random random = new Random();
@@ -36,7 +34,6 @@ namespace Moja_gra
             this.id = id;
             Parent = parent;
             GunTimerStart();
-            bullet = new Bullet();
         }
 
 
@@ -121,6 +118,7 @@ namespace Moja_gra
                 if (MainWindow.Player.ShotsRemaining >= 1)
                 {
                     MainWindow.Player.ShotsRemaining -= 1;
+                    MainWindow.Hud.RemoveBullet();
                     Point ParentPosition = new Point(Canvas.GetLeft(Parent) + Parent.ActualWidth / 2, Canvas.GetTop(Parent) + Parent.ActualHeight / 2);
                     Point MousePosition = new Point(MainWindow.Mouse_x, MainWindow.Mouse_y);
 
@@ -134,12 +132,12 @@ namespace Moja_gra
                     switch (id)
                     {
                         case 0:
-                            Pociski.Shot(point, 20, 10, 10, angle);
+                            Bullet.Shot(point, 20, 10, 10, angle);
                             return; 
                         case 1:
-                            Pociski.Shot(point, 20, 10, 10, angle + RandomAngleVariaton());
-                            Pociski.Shot(point, 20, 10, 10, angle + RandomAngleVariaton());
-                            Pociski.Shot(point, 20, 10, 10, angle + RandomAngleVariaton());
+                            Bullet.Shot(point, 5, 10, 10, angle + RandomAngleVariaton());
+                            Bullet.Shot(point, 5, 10, 10, angle + RandomAngleVariaton());
+                            Bullet.Shot(point, 5, 10, 10, angle + RandomAngleVariaton());
 
                             double Knockback = 10;
 
