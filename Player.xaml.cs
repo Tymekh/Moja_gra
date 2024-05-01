@@ -41,8 +41,8 @@ namespace Moja_gra
         private Brush NextXPositionColor = Brushes.Green;
         private Brush NextYPositionColor = Brushes.Red;
         private Size NewestSize;
-        public  int ShotsRemaining = 3;
-        private int MagSize = 3;
+        public  int ShotsRemaining = 0;
+        private int MagSize = 2;
 
         public Player()
         {
