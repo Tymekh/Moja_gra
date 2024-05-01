@@ -62,7 +62,7 @@ namespace Moja_gra
             Player = gracz;
             Gun = new Gun(Player, 1);
             Gun.createGun();
-            Log log = new Log();
+            //Log log = new Log();
             //log.Show();
             Coin = coin;
         }
@@ -85,16 +85,16 @@ namespace Moja_gra
         }
         private void MyGame_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Rectangle rect = new Rectangle
-            {
-                Width = 50,
-                Height = 50,
-                Fill = Brushes.Black,
-            };
-            Canvas.SetLeft(rect, e.GetPosition(MyGame).X);
-            Canvas.SetTop(rect, e.GetPosition(MyGame).Y);
-            Obstacles.Add(rect);
-            MyCanvas.Children.Add(rect);
+            //Rectangle rect = new Rectangle
+            //{
+            //    Width = 50,
+            //    Height = 50,
+            //    Fill = Brushes.Black,
+            //};
+            //Canvas.SetLeft(rect, e.GetPosition(MyGame).X);
+            //Canvas.SetTop(rect, e.GetPosition(MyGame).Y);
+            //Obstacles.Add(rect);
+            //MyCanvas.Children.Add(rect);
         }
 
         private double CalculateAngle()
@@ -144,7 +144,7 @@ namespace Moja_gra
 
         private void KeyDown(object sender, KeyEventArgs e)
         {
-            Player.PlayerMovement(sender, e);
+            //Player.PlayerMovement(sender, e);
             if (Keyboard.IsKeyDown(Key.Q))
             {
                 ;

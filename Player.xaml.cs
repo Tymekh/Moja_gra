@@ -38,10 +38,11 @@ namespace Moja_gra
         private double UpdatedPlayerSpeed;
         private Rectangle NextXPositionRectangle;
         private Rectangle NextYPositionRectangle;
-        private Brush NextXPositionColor = Brushes.Transparent;
-        private Brush NextYPositionColor = Brushes.Transparent;
+        private Brush NextXPositionColor = Brushes.Green;
+        private Brush NextYPositionColor = Brushes.Red;
         private Size NewestSize;
         public  int ShotsRemaining = 3;
+        private int MagSize = 1000;
 
         public Player()
         {
@@ -398,19 +399,27 @@ namespace Moja_gra
                 if(CheckColision(Obstacle, NextYPositionRectangle))
                 {
                     // bottom
-                    if(Vy > 0 && Vy != Gravity)
+                    if(Vy > 0)
                     {
                         Canvas.SetTop(this, Canvas.GetTop(Obstacle) - this.ActualHeight);
                         Vy = 0;
+                        MainWindow.MyCanvas.Children.Remove(NextYPositionRectangle);
+                        NextYPositionRectangle = null;
+                        MainWindow.MyCanvas.Children.Remove(NextXPositionRectangle);
+                        NextXPositionRectangle = null;
                         IsOnGround = true;
                         TouchingDown = true;
-                        ShotsRemaining = 3;
+                        ShotsRemaining = MagSize;
                     }else
                     // top
                     if (Vy < 0)
                     {
                         Canvas.SetTop(this, Canvas.GetTop(Obstacle) + Obstacle.ActualHeight);
                         Vy = 0;
+                        MainWindow.MyCanvas.Children.Remove(NextYPositionRectangle);
+                        NextYPositionRectangle = null;
+                        MainWindow.MyCanvas.Children.Remove(NextXPositionRectangle);
+                        NextXPositionRectangle = null;
                         TouchingTop = true;
                     }
                 }
@@ -419,9 +428,11 @@ namespace Moja_gra
                     // left
                     if(Vx < 0)
                     {
-                        Canvas.SetLeft(this, Canvas.GetLeft(Obstacle) + 50);
+                        Canvas.SetLeft(this, Canvas.GetLeft(Obstacle) + Obstacle.ActualWidth);
                         TouchingLeft = true;
                         Vx = 0;
+                        MainWindow.MyCanvas.Children.Remove(NextXPositionRectangle);
+                        NextXPositionRectangle = null;
                     }
                     // right
                     if(Vx > 0)
@@ -429,6 +440,8 @@ namespace Moja_gra
                         Canvas.SetLeft(this, Canvas.GetLeft(Obstacle) - this.ActualWidth);
                         TouchingRight = true;
                         Vx = 0;
+                        MainWindow.MyCanvas.Children.Remove(NextXPositionRectangle);
+                        NextXPositionRectangle = null;
                     }
                 }
             }
