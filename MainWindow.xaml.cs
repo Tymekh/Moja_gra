@@ -94,6 +94,8 @@ namespace Moja_gra
             //Canvas.SetTop(rect, e.GetPosition(MyGame).Y);
             //Obstacles.Add(rect);
             //MyCanvas.Children.Add(rect);
+            Player.MagSize += 1;
+            Hud.AddEmptyBullets();
         }
 
         private double CalculateAngle()

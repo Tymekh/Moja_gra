@@ -42,7 +42,7 @@ namespace Moja_gra
         private Brush NextYPositionColor = Brushes.Red;
         private Size NewestSize;
         public  int ShotsRemaining = 0;
-        private int MagSize = 2;
+        public int MagSize = 2;
 
         public Player()
         {
@@ -346,34 +346,6 @@ namespace Moja_gra
                 NextYPositionRectangle = rect;
             }
         }
-
-        private void UpdateTouching()
-        {
-            //ResetTouching();
-            foreach (Rectangle Obstacle in MainWindow.Obstacles)
-            {
-                if (CheckTouching(down, Obstacle))
-                {
-                    TouchingDown = true;
-                }
-                if (CheckTouching(top, Obstacle))
-                {
-                    TouchingTop = true;
-                }
-                if (CheckTouching(left, Obstacle))
-                {
-                    TouchingLeft = true;
-                }
-                if (CheckTouching(right, Obstacle))
-                {
-                    TouchingRight = true;
-                }
-            }
-            if(TouchingDown || TouchingTop || TouchingRight || TouchingLeft)
-            {
-                IsTouching = true;
-            }
-        }
     
         private void ResetTouching()
         {
@@ -399,7 +371,7 @@ namespace Moja_gra
                 if(CheckColision(Obstacle, NextYPositionRectangle))
                 {
                     // bottom
-                    if(Vy > 0)
+                    if(Vy > 0 && Vy != Gravity)
                     {
                         Canvas.SetTop(this, Canvas.GetTop(Obstacle) - this.ActualHeight);
                         Vy = 0;
@@ -443,89 +415,6 @@ namespace Moja_gra
                         Vx = 0;
                         MainWindow.MyCanvas.Children.Remove(NextXPositionRectangle);
                         NextXPositionRectangle = null;
-                    }
-                }
-            }
-        }
-
-        private void CheckAllColisions()
-        {
-            TouchingLeft = false;
-            TouchingRight = false;
-            TouchingDown = false;
-            TouchingTop = false;
-            IsTouching = false;
-            IsOnGround = false;
-            foreach (Rectangle Obstacle in MainWindow.Obstacles)
-            {
-                if (CheckColision(Obstacle, this))
-                {
-                    // Most of this stuff would probably be good to keep stored inside the player
-                    // along side their x and y position. That way it doesn't have to be recalculated
-                    // every collision check
-                    var playerHalfW = this.ActualWidth / 2;
-                    var playerHalfH = this.ActualHeight / 2;
-                    var playerCenterX = Canvas.GetLeft(this) + this.ActualWidth / 2;
-                    var playerCenterY = Canvas.GetTop(this) + this.ActualHeight / 2;
-                    var enemyHalfW = Obstacle.ActualWidth / 2;
-                    var enemyHalfH = Obstacle.ActualHeight / 2;
-                    var enemyCenterX = Canvas.GetLeft(Obstacle) + Obstacle.ActualWidth / 2;
-                    var enemyCenterY = Canvas.GetTop(Obstacle) + Obstacle.ActualHeight / 2;
-
-                    // Calculate the distance between centers
-                    var diffX = playerCenterX - enemyCenterX;
-                    var diffY = playerCenterY - enemyCenterY;
-
-                    // Calculate the minimum distance to separate along X and Y
-                    var minXDist = playerHalfW + enemyHalfW;
-                    var minYDist = playerHalfH + enemyHalfH;
-
-                    // Calculate the depth of collision for both the X and Y axis
-                    var depthX = diffX > 0 ? minXDist - diffX : -minXDist - diffX;
-                    var depthY = diffY > 0 ? minYDist - diffY : -minYDist - diffY;
-
-                    // Now that you have the depth, you can pick the smaller depth and move
-                    // along that axis.
-                    if (depthX != 0 && depthY != 0)
-                    {
-                        if (Math.Abs(depthX) < Math.Abs(depthY)) 
-                        {
-                            // Collision along the X axis. React accordingly
-                            if (depthX > 0)
-                            {
-                                // Left side collision
-                                Canvas.SetLeft(this, Canvas.GetLeft(Obstacle) + this.ActualWidth - 3);
-                                Vx = 0;
-                                TouchingLeft = true;
-                            }
-                            if (depthX < 0)
-                            {
-                                // Right side collision
-                                Canvas.SetLeft(this, Canvas.GetLeft(Obstacle) - this.ActualWidth + 1);
-                                Vx = 0;
-                                TouchingRight = true;
-                            }
-                        }
-                        // Collision along the Y axis.
-                        else
-                        {
-                            if (depthY > 0)
-                            {
-                                // Top side collision
-                                Canvas.SetTop(this, Canvas.GetTop(Obstacle) + Obstacle.ActualHeight + 1);
-                                Vy = 0;
-                                TouchingTop = true;
-                            }
-                            if (depthY < 0)
-                            {
-                                // Bottom side collision
-                                Canvas.SetTop(this, Canvas.GetTop(Obstacle) - this.ActualHeight + Gravity + 1);
-
-                                Vy = Vy < 0? Vy += Vy: Vy -= Vy;
-                                IsOnGround = true;
-                                TouchingDown = true;
-                            }
-                        }
                     }
                 }
             }

@@ -7,10 +7,16 @@
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="800">
     <Grid>
-        <StackPanel x:Name="Hud" Orientation="Horizontal" Height="auto" Margin="5 2 0 0">
+        <StackPanel x:Name="DepletedHud" Height="auto" Orientation="Horizontal" Margin="5 2 0 0" Panel.ZIndex="1">
             <StackPanel.Resources>
                 <Style TargetType="Image">
-                    <Setter Property="Source" Value="img/Bullet.png"/>
+                    <Setter Property="Margin" Value="1"></Setter>
+                </Style>
+            </StackPanel.Resources>
+        </StackPanel>
+        <StackPanel x:Name="Hud" Orientation="Horizontal" Height="auto" Margin="5 2 0 0" Panel.ZIndex="100"> 
+            <StackPanel.Resources>
+                <Style TargetType="Image">
                     <Setter Property="Margin" Value="1"></Setter>
                 </Style>
             </StackPanel.Resources>

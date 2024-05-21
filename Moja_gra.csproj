@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <None Remove="img\Bullet.png" />
+    <None Remove="img\BulletDepleted.png" />
     <None Remove="img\dot.png" />
     <None Remove="img\gun.png" />
     <None Remove="img\shotgun.png" />
@@ -16,6 +17,9 @@
 
   <ItemGroup>
     <Resource Include="img\Bullet.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\BulletDepleted.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="img\dot.png">
