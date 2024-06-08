@@ -34,12 +34,12 @@ namespace Moja_gra
         private double HorizontalMovementReduce = 0.2;
         public bool IsOnGround = false;
         public bool TouchingLeft, TouchingRight, TouchingDown, TouchingTop;
-        private bool IsTouching = false;
+        public bool IsTouching = false;
         private double UpdatedPlayerSpeed;
         private Rectangle NextXPositionRectangle;
         private Rectangle NextYPositionRectangle;
-        private Brush NextXPositionColor = Brushes.Green;
-        private Brush NextYPositionColor = Brushes.Red;
+        private Brush NextXPositionColor = Brushes.Transparent;
+        private Brush NextYPositionColor = Brushes.Transparent;
         private Size NewestSize;
         public  int ShotsRemaining = 0;
         public int MagSize = 2;
@@ -62,7 +62,7 @@ namespace Moja_gra
             ResetTouching();
             NextXPosition();
             NextYPosition();
-            Touching();
+            UpdateTouching();
             UpdatedPlayerSpeed = Math.Pow((PlayerSpeed/10)-0.5, 2) + 1;
             //CheckAllColisions();
 
@@ -74,7 +74,6 @@ namespace Moja_gra
                 Canvas.SetTop(Obstacle, Canvas.GetTop(Obstacle) - Vy);
             }
             //UpdateTouching();
-            MainWindow.IsTouching = IsTouching ? MainWindow.IsTouching = true : MainWindow.IsTouching = false;
 
             //gravity();
 
@@ -196,7 +195,7 @@ namespace Moja_gra
             //}
         }
 
-        public static bool CheckColision(FrameworkElement point1, FrameworkElement point2) // check if 2 elements are coliding
+        private static bool CheckColision(FrameworkElement point1, FrameworkElement point2) // check if 2 elements are coliding
         {
             if (point1 == null || point2 == null) { return false; }
 
@@ -261,28 +260,6 @@ namespace Moja_gra
             }
         }
 
-        private bool CheckTouching(FrameworkElement point1, FrameworkElement point2) // check if 2 elements are touching
-        {
-            if (point1 == null || point2 == null) { return false; }
-
-            var x1 = Canvas.GetLeft(point1);
-            var y1 = Canvas.GetTop(point1);
-
-            Rect HitBox1 = new Rect(x1, y1, point1.ActualWidth + 1, point1.ActualHeight + 1);
-
-            var x2 = Canvas.GetLeft(point2);
-            var y2 = Canvas.GetTop(point2);
-            Rect HitBox2 = new Rect(x2, y2, point2.ActualWidth, point2.ActualHeight);
-
-            if (HitBox1.IntersectsWith(HitBox2))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
         private void NextXPosition()
         {
             MainWindow.MyCanvas.Children.Remove(NextXPositionRectangle);
@@ -356,12 +333,12 @@ namespace Moja_gra
             IsTouching = false;
             IsOnGround = false;
         }
-        private void Touching()
+        private void UpdateTouching()
         {
             gravity();
             foreach (Rectangle Obstacle in MainWindow.Obstacles)
             {
-                if(CheckTouching(this, MainWindow.Coin))
+                if(CheckColision(this, MainWindow.Coin))
                 {
                     MessageBox.Show("wygrałeś");
                     Environment.Exit(0);

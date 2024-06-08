@@ -29,7 +29,6 @@ namespace Moja_gra
         public static BulletCounter Hud;
         public static double Mouse_x, Mouse_y;
         public static List<Rectangle> Obstacles = new List<Rectangle>();
-        public static bool IsTouching;
         private static double HigestVy;
         public static Rectangle Coin;
 
@@ -62,7 +61,7 @@ namespace Moja_gra
             gracz.createPlayer(520, 370);
             Player = gracz;
             Gun = new Gun(Player, 1);
-            Gun.createGun();
+            Gun.CreateGun();
             Log log = new Log();
             log.Show();
             Coin = coin;
@@ -119,7 +118,7 @@ namespace Moja_gra
             stats += "A: " + Keyboard.IsKeyDown(Key.A) + "\n";
             stats += "S: " + Keyboard.IsKeyDown(Key.S) + "\n";
             stats += "D: " + Keyboard.IsKeyDown(Key.D) + "\n";
-            stats += "IsTouching: " + IsTouching + "\n"; 
+            stats += "IsTouching: " + Player.IsTouching + "\n"; 
             stats += "Obstacles count: "+ Obstacles.Count() +"\n";
             stats += "IsOnGround: " + Player.IsOnGround + "\n";
             stats += "TouchingLeft: " + Player.TouchingLeft + "\n";

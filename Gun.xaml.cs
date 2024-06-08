@@ -22,7 +22,6 @@ namespace Moja_gra
     public partial class Gun : UserControl
     {
         private DispatcherTimer GunTimer = new DispatcherTimer();
-        double angle;
         Rectangle GunRectangle;
         Player Parent;
         private int id;
@@ -74,7 +73,7 @@ namespace Moja_gra
             }
         }
 
-        public void createGun()
+        public void CreateGun()
         {
             ImageBrush image = new ImageBrush { };
             double width = 50;
